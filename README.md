@@ -1,6 +1,6 @@
 # playfield-site
 
-The public face of [Playfield](https://github.com/sandrocaseiro/playfield): the
+The public face of Playfield: the
 website, and the releases people download.
 
 **Nothing here is edited per release.** The app's private repository publishes a
@@ -10,6 +10,11 @@ the changelog page are read from this repository's Releases through the GitHub
 API at build time, so they are always whatever the releases currently say.
 
 To correct a changelog, edit the release on GitHub. The site rebuilds itself.
+
+A release's files are sorted onto the download page by their own names —
+`-setup.exe`, `.msi`, `.AppImage`, `.deb`, `SHA256SUMS`. A package renamed
+upstream lands under no platform and with no description until
+`src/lib/releases.ts` is taught the new suffix.
 
 ## Running it
 

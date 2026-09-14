@@ -1,0 +1,100 @@
+---
+// The download buttons, wherever a page offers them.
+//
+// Both platforms are always drawn, and the markup order never changes: a page
+// that guesses which one a reader wants and prints only that hides the download
+// from everybody it guesses wrong about. The script at the bottom moves the
+// brass onto the platform the browser says it is on, and nothing else.
+import { getLatest, pickInstaller, formatBytes, type Platform } from "../lib/releases";
+
+interface Props {
+  /** The version-and-platform line under the buttons. Off where the section
+   *  already says what release it is talking about. */
+  meta?: boolean;
+}
+const { meta = true } = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+const latest = await getLatest();
+
+const builds: { platform: Platform; label: string }[] = [
+  { platform: "windows", label: "Download for Windows" },
+  { platform: "linux", label: "Download for Linux" },
+];
+const offered = builds
+  .map((build) => ({ ...build, asset: pickInstaller(latest, build.platform) }))
+  .filter((build) => build.asset !== null);
+---
+
+<div class="dl" data-downloads>
+  {
+    offered.length > 0 ? (
+      offered.map((build, i) => (
+        <a
+          class:list={["btn", i === 0 ? "btn-primary" : "btn-quiet"]}
+          data-os={build.platform}
+          href={build.asset!.url}
+          download
+        >
+          {build.label}
+        </a>
+      ))
+    ) : (
+      <a class="btn btn-primary" href={`${base}download/`}>
+        Downloads
+      </a>
+    )
+  }
+  <slot />
+</div>
+
+{
+  meta && (
+    <p class="dl__meta">
+      {latest ? (
+        <>
+          {latest.version}
+          {offered.some((b) => b.platform === "windows") && " · Windows 10 and 11"}
+          {offered.some((b) => b.platform === "linux") && " · Linux, as an AppImage or a .deb"}
+          {offered.length === 1 && ` · ${formatBytes(offered[0]!.asset!.size)}`}
+        </>
+      ) : (
+        "No release yet"
+      )}
+    </p>
+  )
+}
+
+<script>
+  // Which of the two wears the brass, and which comes first. The check is the
+  // user agent because there is nothing better: a download page cannot ask, and
+  // a reader on the wrong one still has the other button beside it.
+  const linux = /Linux|X11/.test(navigator.userAgent) && !/Android/.test(navigator.userAgent);
+  if (linux) {
+    for (const row of document.querySelectorAll<HTMLElement>("[data-downloads]")) {
+      const here = row.querySelector<HTMLElement>('[data-os="linux"]');
+      const other = row.querySelector<HTMLElement>('[data-os="windows"]');
+      if (!here || !other) continue;
+      here.classList.replace("btn-quiet", "btn-primary");
+      other.classList.replace("btn-primary", "btn-quiet");
+      row.prepend(here);
+    }
+  }
+</script>
+
+<style>
+  .dl {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-4) var(--s-6);
+    margin-top: var(--s-8);
+  }
+
+  .dl__meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--faint);
+    margin-top: var(--s-4);
+  }
+</style>

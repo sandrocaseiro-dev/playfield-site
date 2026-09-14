@@ -3,7 +3,8 @@ import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import Mark from "../components/Mark.astro";
 import StoreChip from "../components/StoreChip.astro";
-import { getLatest, pickInstaller, formatBytes } from "../lib/releases";
+import Download from "../components/Download.astro";
+import { getLatest, formatDate } from "../lib/releases";
 
 import shotDetails from "../assets/shots/details.png";
 import shotLibrary from "../assets/shots/library.png";
@@ -14,10 +15,11 @@ import shotBeat from "../assets/shots/beat.png";
 import shotAchievements from "../assets/shots/achievements.png";
 import shotCheats from "../assets/shots/cheats.png";
 import shotStream from "../assets/shots/stream.png";
+import shotPrefixes from "../assets/shots/prefixes.png";
+import shotExternal from "../assets/shots/external.png";
 
 const base = import.meta.env.BASE_URL;
 const latest = await getLatest();
-const installer = pickInstaller(latest);
 
 const stores = [
   { id: "steam", label: "Steam" },
@@ -30,7 +32,7 @@ const stores = [
   { id: "msft", label: "Microsoft Store" },
 ] as const;
 
-// The four panes of the tabbed section. Each one is a screen of the real
+// The panes of the tabbed section. Each one is a screen of the real
 // application, so the tab it sits behind is named after what that screen shows
 // rather than after the service it reads.
 const rest = [
@@ -38,7 +40,7 @@ const rest = [
     id: "beat",
     tab: "Playtime and progress",
     heading: "How long it takes, and how far in you are.",
-    body: "Main story, extras, and everything — from HowLongToBeat, next to the hours you have actually played. Mark a game backlog, playing, completed or retired, and correct the hours yourself when a store has them wrong.",
+    body: "Main story, extras, and everything — from HowLongToBeat, next to the hours you have actually played. Mark a game backlog, playing, completed or retired, and correct the hours yourself when a store has them wrong. Your own hours can go back the other way, onto your HowLongToBeat list, one game or the whole library.",
     shot: shotBeat,
     alt: "A game's page in Playfield, showing how long it takes to beat beside how long it has been played",
   },
@@ -54,9 +56,17 @@ const rest = [
     id: "cheats",
     tab: "Trainers and cheats",
     heading: "Cheats, without the download hunt.",
-    body: "Get a trainer in one press. Playfield keeps it with your library, tells you if it fits the version you have, and starts and closes it with the game. Windows only.",
+    body: "Get a trainer in one press — or have Playfield build the cheats itself, against the copy of the game on this disk. Either way they go in when the game starts and come out when it closes, pressed from a window beside the game or from a page your phone can open.",
     shot: shotCheats,
-    alt: "A game's page with its trainer panel, naming the version and the options it carries",
+    alt: "A game's page with its cheats panel, naming the version and the options it carries",
+  },
+  {
+    id: "external",
+    tab: "Games from anywhere",
+    heading: "A program on this disk is a game in your library.",
+    body: "Point Playfield at the file. It takes the name, looks the game up and brings back the cover and the description, and the row sits beside everything the stores gave you — played, timed and searched like any other. Nothing is moved, copied or installed, and removing it never touches the files.",
+    shot: shotExternal,
+    alt: "The Add a game dialog over the collections page, with the External collection behind it",
   },
   {
     id: "deals",
@@ -71,7 +81,7 @@ const rest = [
 
 <Base
   title="Playfield — all your games, every store, one library"
-  description="Your games are scattered across eight stores and eight launchers. Playfield gathers them into one library you actually browse, instead of hunting for what you own."
+  description="Your games are scattered across eight stores and eight launchers. Playfield gathers them into one library you actually browse, instead of hunting for what you own. Windows and Linux."
 >
   <section class="hero">
     <div class="page hero__inner">
@@ -83,29 +93,10 @@ const rest = [
         </h1>
         <p class="lede hero__lede">
           Steam, Epic, GOG, Amazon, EA, Battle.net, Ubisoft and the Microsoft Store — every
-          game you own, on one shelf.
+          game you own, on one shelf, on Windows and on Linux.
         </p>
 
-        <div class="hero__actions">
-          {
-            installer ? (
-              <a class="btn btn-primary" href={installer.url} download>
-                Download for Windows
-              </a>
-            ) : (
-              <a class="btn btn-primary" href={`${base}download/`}>
-                Downloads
-              </a>
-            )
-          }
-          <p class="hero__meta">
-            {
-              latest
-                ? `${latest.version} · ${installer ? formatBytes(installer.size) : ""} · Windows 10 and 11`
-                : "No release yet"
-            }
-          </p>
-        </div>
+        <Download />
 
         <ul class="chiprow" aria-label="Stores Playfield reads">
           {
@@ -176,6 +167,31 @@ const rest = [
   <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
+        <p class="eyebrow">Windows and Linux</p>
+        <h2>On Linux, with the Windows stores still in it.</h2>
+        <p class="lede">
+          Steam is read straight from the client you already have. The six that ship a
+          Windows client only — GOG Galaxy, the Epic launcher, Amazon Games, Ubisoft
+          Connect, the EA app and Battle.net — are installed by Playfield into a Wine
+          prefix of its own, on the Proton build you pick, and your library is read out of
+          there. A client you already run under Lutris, Heroic or Bottles is used where it
+          sits rather than fetched a second time.
+        </p>
+        <p class="lede">
+          A game's page carries its ProtonDB rating and says which build it runs under, and
+          a game with a Linux version of its own is badged native instead. The Microsoft
+          Store is Windows itself, so it is the one that stays behind.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotPrefixes} alt="Playfield's store settings on Linux, with a prefix under the GOG row and the Proton builds on this machine" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature feature--flip">
+    <div class="page feature__inner">
+      <div class="feature__text">
         <p class="eyebrow">From the sofa</p>
         <h2>Made for a controller and a television.</h2>
         <p class="lede">
@@ -189,7 +205,7 @@ const rest = [
     </div>
   </section>
 
-  <section class="feature feature--flip">
+  <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Streaming</p>
@@ -263,24 +279,13 @@ const rest = [
   <section class="closing">
     <div class="page closing__inner">
       <h2 class="closing__heading">Your games, wherever you bought them.</h2>
-      <div class="hero__actions">
-        {
-          installer ? (
-            <a class="btn btn-primary" href={installer.url} download>
-              Download for Windows
-            </a>
-          ) : (
-            <a class="btn btn-primary" href={`${base}download/`}>
-              Downloads
-            </a>
-          )
-        }
+      <Download meta={false}>
         <a class="btn btn-quiet" href={`${base}changelog/`}>Read the changelog</a>
-      </div>
+      </Download>
       {
         latest && (
-          <p class="hero__meta">
-            {latest.version} · released {new Date(latest.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+          <p class="closing__meta">
+            {latest.version} · released {formatDate(latest.date)}
           </p>
         )
       }
@@ -358,20 +363,6 @@ const rest = [
 
   .hero__lede {
     margin-top: var(--s-6);
-  }
-
-  .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--s-4) var(--s-6);
-    margin-top: var(--s-8);
-  }
-
-  .hero__meta {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--faint);
   }
 
   .chiprow {
@@ -576,8 +567,11 @@ const rest = [
     max-width: 20ch;
   }
 
-  .closing .hero__actions {
-    margin-top: var(--s-8);
+  .closing__meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--faint);
+    margin-top: var(--s-6);
   }
 
   /* Narrow --------------------------------------------------------------- */
