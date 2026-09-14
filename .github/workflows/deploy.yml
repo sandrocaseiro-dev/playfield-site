@@ -46,6 +46,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Absent, the build simply ships no analytics and the site still deploys.
           PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID }}
+          # The release this build exists to publish. GitHub answers its own
+          # release list from a minute of cache, and this workflow starts within
+          # seconds of the publish, so the list the build reads can easily be the
+          # one from before — which is how 1.0.1 deployed, green, as 1.0.0. The
+          # build waits for this tag to appear and fails if it never does.
+          #
+          # Only for a release that should now be in the list: a deleted or
+          # unpublished one is supposed to be missing, and a draft was never
+          # there. Every other trigger leaves this empty and builds at once.
+          EXPECT_RELEASE_TAG: >-
+            ${{ (github.event_name == 'release'
+            && github.event.action != 'deleted'
+            && github.event.action != 'unpublished'
+            && github.event.release.draft == false)
+            && github.event.release.tag_name || '' }}
         run: npm run build
 
       - uses: actions/configure-pages@v5

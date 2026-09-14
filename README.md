@@ -1,6 +1,6 @@
 # playfield-site
 
-The public face of Playfield: the
+The public face of [Playfield](https://github.com/sandrocaseiro-dev/playfield): the
 website, and the releases people download.
 
 **Nothing here is edited per release.** The app's private repository publishes a
@@ -27,9 +27,19 @@ npm run build    # into dist/
 The build reaches GitHub for the release list. Without a network, or before the
 first release exists, it builds anyway with an empty download page — that is
 deliberate, because the site has to go up before there is anything to download.
+In CI that licence is withdrawn: a build that cannot read the releases fails
+rather than publish an empty download page over a full one.
 
 `RELEASES_REPO` overrides which repository it reads, which is the only way to
 see the changelog page populated before this one has releases of its own.
+
+`EXPECT_RELEASE_TAG` is the tag this build has to find. GitHub answers its own
+release list from a minute of cache, and a release event starts the workflow
+seconds after the publish, so the list a release build reads is often the one
+from before it — which is how 1.0.1 was published, built, and deployed green as
+1.0.0. The workflow sets this to the tag that woke it; the build then re-reads
+past the cache until the tag appears, and fails if it never does. Unset, as in
+every local build and every push, the build takes the first answer it gets.
 
 `PUBLIC_GA_MEASUREMENT_ID` is the Google Analytics 4 measurement ID (`G-…`).
 It is only read in a production build, so `npm run dev` never reports, and a

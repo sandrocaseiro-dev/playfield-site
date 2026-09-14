@@ -11,6 +11,29 @@
 const REPO = process.env.RELEASES_REPO ?? "sandrocaseiro-dev/playfield-site";
 const TOKEN = process.env.GITHUB_TOKEN;
 
+// The tag whose release woke this build, when a release is what woke it.
+//
+// GitHub answers the release list with a minute of cache (`s-maxage=60`), and a
+// release event starts this workflow within seconds of the publish. The first
+// read therefore lands, routinely, on the snapshot taken before the release was
+// published — the tag missing from the list, or still sitting in it as a draft.
+// A build that accepts that answer renders the release before it, deploys it
+// green, and leaves nothing behind to say the site is a release out of date.
+// That is exactly how 1.0.1 was published and never reached the page. So when
+// the workflow knows which tag has to be there, the build waits for it.
+const EXPECT_TAG = process.env.EXPECT_RELEASE_TAG || null;
+
+// How long to wait for that: long enough to outlast the cached minute.
+const ATTEMPTS = EXPECT_TAG ? 8 : 1;
+const RETRY_MS = 12_000;
+
+// Not reaching GitHub is survivable on a laptop and not in CI. Locally it is a
+// build without a network; in CI it is a download page with no downloads on it,
+// published over the one that had them.
+const IN_CI = process.env.CI === "true";
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export type AssetKind = "installer" | "msi" | "appimage" | "deb" | "checksums" | "other";
 export type Platform = "windows" | "linux";
 
@@ -80,26 +103,71 @@ export function formatDate(iso: string): string {
 
 let cache: Release[] | null = null;
 
-export async function getReleases(): Promise<Release[]> {
-  if (cache) return cache;
+function listed(raw: any[], tag: string): boolean {
+  return raw.some((r) => r.tag_name === tag && !r.draft);
+}
 
-  // A failure here is not a build failure. The site has to go up before the
-  // first release exists, and it has to build on a machine with no network.
-  let raw: any[] = [];
+async function fetchReleases(): Promise<any[] | null> {
+  // The timestamp is nothing the API reads. It is here so that two builds a
+  // few seconds apart cannot be answered from the same cached minute, which is
+  // the whole reason a fresh release goes missing.
+  const url = `https://api.github.com/repos/${REPO}/releases?per_page=50&_=${Date.now()}`;
   try {
-    const response = await fetch(`https://api.github.com/repos/${REPO}/releases?per_page=50`, {
+    const response = await fetch(url, {
       headers: {
         Accept: "application/vnd.github+json",
+        "Cache-Control": "no-cache",
         ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
       },
     });
-    if (response.ok) raw = await response.json();
-    else console.warn(`[releases] ${REPO} answered ${response.status} — building with no releases`);
+    if (response.ok) return await response.json();
+    console.warn(`[releases] ${REPO} answered ${response.status}`);
   } catch (error) {
-    console.warn(`[releases] could not reach GitHub (${error}) — building with no releases`);
+    console.warn(`[releases] could not reach GitHub (${error})`);
+  }
+  return null;
+}
+
+export async function getReleases(): Promise<Release[]> {
+  if (cache) return cache;
+
+  let raw: any[] | null = null;
+
+  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+    const answer = await fetchReleases();
+    if (answer) {
+      raw = answer;
+      if (!EXPECT_TAG || listed(answer, EXPECT_TAG)) break;
+      console.warn(
+        `[releases] ${EXPECT_TAG} is published but not in the list yet ` +
+          `(attempt ${attempt}/${ATTEMPTS})`,
+      );
+    }
+    if (attempt < ATTEMPTS) {
+      console.warn(`[releases] waiting ${RETRY_MS / 1000}s out of GitHub's cache`);
+      await sleep(RETRY_MS);
+    }
   }
 
-  cache = raw
+  // An empty list is a fine answer: the site has to go up before the first
+  // release exists. No answer at all is not, and neither is an answer missing
+  // the release this build was woken for — both would quietly publish a site
+  // that is wrong about what you can download, so they stop the build instead.
+  if (!raw && IN_CI) {
+    throw new Error(
+      `[releases] could not read ${REPO}'s releases after ${ATTEMPTS} attempt(s) — ` +
+        `refusing to publish a site with no downloads on it`,
+    );
+  }
+  if (EXPECT_TAG && !listed(raw ?? [], EXPECT_TAG)) {
+    throw new Error(
+      `[releases] ${EXPECT_TAG} was published, but GitHub's release list still does ` +
+        `not show it ${ATTEMPTS} attempts later — refusing to publish a site that ` +
+        `would not mention it`,
+    );
+  }
+
+  cache = (raw ?? [])
     .filter((r) => !r.draft)
     .map((r): Release => {
       const version = String(r.tag_name ?? "").replace(/^v/, "");
