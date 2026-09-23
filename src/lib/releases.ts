@@ -35,6 +35,13 @@ const IN_CI = process.env.CI === "true";
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export type AssetKind = "installer" | "msi" | "appimage" | "deb" | "checksums" | "other";
+
+// Two things are released here: Playfield itself, tagged vX.Y.Z, and its Decky
+// plugin, tagged decky-vX.Y.Z by the plugin's own pipeline. The version lines
+// are unrelated, so the prefix is what tells them apart — and a plugin release
+// is never the Playfield a person downloads.
+export type Product = "app" | "decky";
+const DECKY_TAG = "decky-";
 export type Platform = "windows" | "linux";
 
 export interface ReleaseAsset {
@@ -46,6 +53,7 @@ export interface ReleaseAsset {
 }
 
 export interface Release {
+  product: Product;
   version: string;
   tag: string;
   headline: string;
@@ -170,8 +178,11 @@ export async function getReleases(): Promise<Release[]> {
   cache = (raw ?? [])
     .filter((r) => !r.draft)
     .map((r): Release => {
-      const version = String(r.tag_name ?? "").replace(/^v/, "");
+      const tag = String(r.tag_name ?? "");
+      const product: Product = tag.startsWith(DECKY_TAG) ? "decky" : "app";
+      const version = tag.slice(product === "decky" ? DECKY_TAG.length : 0).replace(/^v/, "");
       return {
+        product,
         version,
         tag: r.tag_name,
         headline: headlineOf(r.name ?? ""),
@@ -195,10 +206,16 @@ export async function getReleases(): Promise<Release[]> {
   return cache;
 }
 
-// The newest thing a person should actually install: a pre-release is offered
-// on the downloads page but never as *the* download.
+// Playfield's own releases, without the Decky plugin's.
+export async function getAppReleases(): Promise<Release[]> {
+  return (await getReleases()).filter((r) => r.product === "app");
+}
+
+// The newest Playfield a person should actually install: a pre-release is
+// offered on the downloads page but never as *the* download, and a Decky plugin
+// release never is.
 export async function getLatest(): Promise<Release | null> {
-  const releases = await getReleases();
+  const releases = await getAppReleases();
   return releases.find((r) => !r.prerelease) ?? releases[0] ?? null;
 }
 

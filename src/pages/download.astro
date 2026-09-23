@@ -1,9 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
-import { getReleases, getLatest, formatBytes, formatDate, type AssetKind } from "../lib/releases";
+import { getAppReleases, getLatest, formatBytes, formatDate, type AssetKind } from "../lib/releases";
 
 const base = import.meta.env.BASE_URL;
-const releases = await getReleases();
+const releases = await getAppReleases();
 const latest = await getLatest();
 const older = releases.filter((r) => r.tag !== latest?.tag).slice(0, 8);
 

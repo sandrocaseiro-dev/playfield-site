@@ -10,15 +10,18 @@ const releases = await getReleases();
 // only by whoever can edit a release. Rendering it is the whole point of this
 // page: correcting a release on GitHub is how this page gets corrected.
 marked.setOptions({ gfm: true, breaks: false });
+// A plugin release's anchor carries its prefix: its numbers are its own and
+// would otherwise land on the Playfield release of the same number.
 const rendered = releases.map((release) => ({
   ...release,
+  anchor: release.product === "decky" ? `decky-${release.version}` : release.version,
   html: marked.parse(release.body || "_No notes were written for this release._"),
 }));
 ---
 
 <Base
   title="Playfield — changelog"
-  description="Every Playfield release and what changed in it."
+  description="Every release of Playfield and its Decky plugin, and what changed in each."
 >
   <section class="head">
     <div class="page">
@@ -39,10 +42,11 @@ const rendered = releases.map((release) => ({
         </p>
       ) : (
         rendered.map((release) => (
-          <article class="release" id={release.version}>
+          <article class="release" id={release.anchor}>
             <header class="release__head">
+              {release.product === "decky" && <p class="release__product">Decky plugin</p>}
               <h2>
-                <a href={`#${release.version}`}>{release.version}</a>
+                <a href={`#${release.anchor}`}>{release.version}</a>
               </h2>
               <p class="release__meta">
                 {formatDate(release.date)}
@@ -96,6 +100,15 @@ const rendered = releases.map((release) => ({
     gap: clamp(1.5rem, 5vw, 4rem);
     padding-block: var(--s-12);
     border-top: 1px solid var(--hairline);
+  }
+
+  .release__product {
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    text-transform: uppercase;
+    letter-spacing: var(--track-label);
+    color: var(--brass);
+    margin-bottom: var(--s-2);
   }
 
   .release__head h2 {
