@@ -105,16 +105,15 @@ const packageList = packages.length
         <section class="after">
           <h2>After the first one</h2>
           <p>
-            Playfield updates itself in place, whichever of these you took{" "}
+            Playfield updates itself, whichever of these you took{" "}
             {packageList && `— ${packageList}`}. It tells you when there is a newer version
-            and installs it over this one, and never leaves a second Playfield behind.
+            and installs it over the one you have, so you never end up with two.
           </p>
           <p>
-            Everything it knows — your library, your settings, the store sign-ins, the
-            artwork — lives in a <code>data</code> folder beside the program, so a copy on a
-            stick carries the lot with nothing to switch on. Where the operating system will
-            not allow writing there, Playfield says so and uses this machine's folders
-            instead.
+            Your library, settings and artwork live in a <code>data</code> folder next to
+            Playfield, so a copy on a USB stick carries them with it. Where Playfield can't
+            write next to itself, as with the .deb, it uses your home folder instead. On Linux,
+            the store apps it installs stay on the machine.
           </p>
         </section>
       </div>
