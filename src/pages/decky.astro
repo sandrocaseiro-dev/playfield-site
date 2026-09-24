@@ -1,0 +1,376 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import { getLatestDecky, pickPluginZip, formatBytes, formatDate } from "../lib/releases";
+
+import shotPage from "../assets/shots/decky/page.png";
+import shotSheet from "../assets/shots/decky/sheet.png";
+import shotLibrary from "../assets/shots/decky/library.png";
+import shotPanel from "../assets/shots/decky/panel.png";
+import shotStores from "../assets/shots/decky/stores.png";
+
+const base = import.meta.env.BASE_URL;
+const latest = await getLatestDecky();
+const zip = pickPluginZip(latest);
+
+// Every shot is Steam's Game Mode at the Deck's own 1280 × 800, so they are
+// sized for the width they were taken at rather than stretched past it.
+const widths = [640, 960, 1280];
+---
+
+<Base
+  title="Playfield for Steam's Game Mode — the Decky plugin"
+  description="Browse, install and play your games from every store in Steam's Game Mode. A Decky plugin for Playfield on Linux."
+>
+  <section class="hero">
+    <div class="page hero__inner">
+      <div class="hero__lockup">
+        <p class="eyebrow">Decky plugin · an add-on to Playfield</p>
+        <h1 class="hero__title">
+          Your whole library,<br />
+          <span class="hero__title-brass">in Game Mode.</span>
+        </h1>
+        <p class="lede hero__lede">
+          Browse, install and play your games from GOG, Epic, Amazon, EA, Battle.net and
+          Ubisoft right inside Steam's Game Mode, next to the games you bought on Steam.
+        </p>
+
+        <div class="dl">
+          {
+            zip ? (
+              <a class="btn btn-primary" href={zip.url} download>
+                Download the plugin
+              </a>
+            ) : (
+              <span class="btn btn-quiet dl__none">No release yet</span>
+            )
+          }
+          <a class="btn btn-quiet" href={`${base}download/`}>Get Playfield first</a>
+        </div>
+        {
+          latest && (
+            <p class="dl__meta">
+              {latest.version} · released {formatDate(latest.date)}
+              {zip && ` · ${formatBytes(zip.size)}`}
+            </p>
+          )
+        }
+      </div>
+
+      <figure class="shot shot--hero">
+        <Image src={shotPage} alt="Enter the Gungeon's page in Steam's Game Mode, with an Install on Amazon button and a Playfield tab first in the row" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="page statement">
+      <div>
+        <p class="eyebrow">An add-on to Playfield</p>
+        <h2>Set up once on the desktop. Play from the couch.</h2>
+      </div>
+      <div class="statement__body">
+        <p class="lede">
+          Playfield finds your games and sets up each store on the desktop. The plugin brings
+          that whole library into Game Mode, so finding, installing and starting a game never
+          means leaving it.
+        </p>
+        <p class="lede">
+          New games show up in Steam's library each time the plugin syncs — when Steam
+          starts, after an install, or whenever you press <em>Sync</em> — with no restart.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">In Steam's library</p>
+        <h2>Every game you own, in one place.</h2>
+        <p class="lede">
+          Your games from every store sit in Steam's library with their artwork, beside the
+          ones you bought on Steam. A small store mark on each tile tells you where a game
+          came from, and games you haven't installed are faded, so what's ready to play stands
+          out. A collection for each store, and one for everything installed, makes any game
+          easy to find.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotLibrary} alt="A Playfield · Amazon collection in Steam's library, each tile carrying the Amazon mark and the uninstalled ones faded" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature feature--flip">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">On the game's page</p>
+        <h2>Install and play from the game's page.</h2>
+        <p class="lede">
+          Press <em>Install</em> and the game downloads from its store without leaving Game
+          Mode. Own it on more than one store? Pick which one. When it's ready, Steam's own
+          <em>Play</em> button starts it.
+        </p>
+        <p class="lede">
+          Some stores can also download without opening their app — an experimental option
+          in the panel — with the progress on the game's page and in Steam's Downloads.
+        </p>
+        <p class="lede">
+          The <em>Playfield</em> tab opens first on every game Playfield knows, your Steam
+          games included: a description, trailers and screenshots, the stores you own it on,
+          and facts like its size, release date and critics' score.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotSheet} alt="The Playfield tab on a game's page: the description, tags, trailers and screenshots, the stores it is owned on, and its facts" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">Quick Access</p>
+        <h2>Choose what shows up.</h2>
+        <p class="lede">
+          Turn each store on or off from Quick Access, see how many of its games are in Steam,
+          and sync whenever you like. Turning a store off keeps its games in your library,
+          with their playtime, until you choose to remove them.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotPanel} alt="The Playfield panel in Quick Access, with a switch and a game count for each store" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature feature--flip">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">The stores themselves</p>
+        <h2>Your store apps, one press away.</h2>
+        <p class="lede">
+          Each store's app gets its own tile. When a store asks you to sign in again, open it
+          from the couch, sign in, and close it from Steam's menu like any game.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotStores} alt="The Playfield · Stores collection: tiles for Amazon Games, Battle.net, EA, the Epic Games Store, GOG Galaxy and Ubisoft Connect" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="page statement">
+      <div>
+        <p class="eyebrow">What it needs</p>
+        <h2>Playfield, and Decky.</h2>
+      </div>
+      <div class="statement__body">
+        <ol class="needs">
+          <li>
+            <strong>Playfield for Linux</strong> on the same machine, with your stores set up. <a href={`${base}download/`}>Download it here.</a>
+          </li>
+          <li>
+            <strong>Decky Loader</strong>, which adds plugins to Steam's Game Mode.
+          </li>
+          <li>
+            <strong>This plugin.</strong> It isn't in Decky's store: turn on developer mode in
+            Decky's settings, then install the zip from <em>Developer</em>.
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="page closing__inner">
+      <h2 class="closing__heading">Your games, on the couch.</h2>
+      <div class="dl">
+        {
+          zip ? (
+            <a class="btn btn-primary" href={zip.url} download>
+              Download the plugin
+            </a>
+          ) : (
+            <a class="btn btn-primary" href={`${base}download/`}>Download Playfield</a>
+          )
+        }
+        <a class="btn btn-quiet" href={`${base}changelog/`}>Read the changelog</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero ---------------------------------------------------------------- */
+
+  .hero {
+    padding-block: clamp(2.5rem, 5vw, 4.5rem) 0;
+    background:
+      radial-gradient(60rem 32rem at 12% -10%, rgb(224 164 88 / 0.09), transparent 70%),
+      var(--ink);
+  }
+
+  .hero__lockup {
+    max-width: 52rem;
+  }
+
+  .hero__title {
+    font-size: var(--text-display);
+    font-weight: 800;
+    letter-spacing: var(--track-display);
+    line-height: 0.94;
+    margin-top: var(--s-4);
+  }
+
+  .hero__title-brass {
+    color: var(--brass);
+  }
+
+  .hero__lede {
+    margin-top: var(--s-6);
+  }
+
+  .dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-8);
+  }
+
+  .dl__none {
+    cursor: default;
+  }
+
+  .dl__meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--faint);
+    margin-top: var(--s-4);
+  }
+
+  /* Screenshots ---------------------------------------------------------- */
+
+  .shot {
+    margin: 0;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--slate);
+    box-shadow: 0 2rem 5rem rgb(0 0 0 / 0.55);
+    max-width: 68rem;
+  }
+
+  .shot :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  .shot--hero {
+    margin-top: clamp(2.5rem, 4vw, 3.5rem);
+  }
+
+  .feature--flip .shot {
+    margin-left: auto;
+  }
+
+  /* Bands and features --------------------------------------------------- */
+
+  .band {
+    padding-block: var(--s-24);
+    border-top: 1px solid var(--hairline);
+    margin-top: var(--s-24);
+  }
+
+  .statement {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .statement h2 {
+    font-size: var(--text-2xl);
+    margin-top: var(--s-4);
+  }
+
+  .statement__body .lede + .lede {
+    margin-top: var(--s-6);
+  }
+
+  .needs {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: var(--s-4);
+    color: var(--muted);
+  }
+
+  .needs li::marker {
+    color: var(--brass);
+    font-family: var(--font-mono);
+  }
+
+  .needs strong {
+    color: var(--bone);
+    font-weight: 600;
+  }
+
+  .needs a {
+    color: var(--brass);
+  }
+
+  .feature {
+    padding-block: var(--s-24) 0;
+  }
+
+  .feature__inner {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .feature__text {
+    max-width: 44rem;
+  }
+
+  .feature--flip .feature__text {
+    margin-left: auto;
+  }
+
+  .feature__text h2 {
+    font-size: var(--text-2xl);
+    margin-top: var(--s-4);
+  }
+
+  .feature__text .lede {
+    margin-top: var(--s-6);
+  }
+
+  /* Closing -------------------------------------------------------------- */
+
+  .closing {
+    padding-block: var(--s-16) var(--s-8);
+    border-top: 1px solid var(--hairline);
+    margin-top: var(--s-24);
+  }
+
+  .closing__heading {
+    font-size: var(--text-3xl);
+    max-width: 20ch;
+  }
+
+  /* Narrow --------------------------------------------------------------- */
+
+  @media (max-width: 60rem) {
+    .statement {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .feature--flip .feature__text,
+    .feature--flip .shot {
+      margin-left: 0;
+    }
+  }
+</style>

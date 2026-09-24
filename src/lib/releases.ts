@@ -219,6 +219,18 @@ export async function getLatest(): Promise<Release | null> {
   return releases.find((r) => !r.prerelease) ?? releases[0] ?? null;
 }
 
+// The newest Decky plugin to offer, on the same terms: a pre-release only when
+// there is nothing else.
+export async function getLatestDecky(): Promise<Release | null> {
+  const releases = (await getReleases()).filter((r) => r.product === "decky");
+  return releases.find((r) => !r.prerelease) ?? releases[0] ?? null;
+}
+
+// The plugin ships as one zip beside its checksums.
+export function pickPluginZip(release: Release | null): ReleaseAsset | null {
+  return release?.assets.find((a) => a.name.endsWith(".zip")) ?? null;
+}
+
 // The one file to offer a person on this platform, in the order a person who
 // has not chosen would want them: the installer over the MSI, the AppImage over
 // the .deb — the AppImage runs on any distribution, and the .deb only runs on

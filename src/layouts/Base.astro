@@ -14,6 +14,7 @@ const here = Astro.url.pathname;
 // stay out of the numbers, and so a local build requests nothing at all.
 const gaId = import.meta.env.PROD ? import.meta.env.PUBLIC_GA_MEASUREMENT_ID : undefined;
 const nav = [
+  { href: `${base}decky/`, label: "Decky" },
   { href: `${base}download/`, label: "Download" },
   { href: `${base}changelog/`, label: "Changelog" },
 ];
@@ -65,6 +66,7 @@ const nav = [
         <p class="footer__links">
           <a href={`${base}download/`}>Download</a>
           <a href={`${base}changelog/`}>Changelog</a>
+          <a href={`${base}decky/`}>Decky plugin</a>
           <a href="https://github.com/sandrocaseiro-dev/playfield-site/releases">Releases</a>
         </p>
       </div>
@@ -128,6 +130,7 @@ const nav = [
   }
 
   .masthead nav a {
+    white-space: nowrap;
     text-decoration: none;
     color: var(--muted);
     padding-block: var(--s-2);
@@ -142,6 +145,15 @@ const nav = [
   .masthead nav a[aria-current="page"] {
     color: var(--brass);
     border-bottom-color: var(--brass);
+  }
+
+  /* Three links and the wordmark have to share a phone's width. */
+  @media (max-width: 26rem) {
+    .masthead nav {
+      gap: var(--s-4);
+      font-size: var(--text-micro);
+      letter-spacing: 0;
+    }
   }
 
   .footer {
