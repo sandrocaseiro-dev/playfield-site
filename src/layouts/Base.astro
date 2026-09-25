@@ -14,7 +14,8 @@ const here = Astro.url.pathname;
 // stay out of the numbers, and so a local build requests nothing at all.
 const gaId = import.meta.env.PROD ? import.meta.env.PUBLIC_GA_MEASUREMENT_ID : undefined;
 const nav = [
-  { href: `${base}decky/`, label: "Decky" },
+  // A phone has no room for the long label beside the wordmark.
+  { href: `${base}decky/`, label: "Decky plugin", short: "Decky" },
   { href: `${base}download/`, label: "Download" },
   { href: `${base}changelog/`, label: "Changelog" },
 ];
@@ -44,7 +45,14 @@ const nav = [
           {
             nav.map((item) => (
               <a href={item.href} aria-current={here.startsWith(item.href) ? "page" : undefined}>
-                {item.label}
+                {item.short ? (
+                  <>
+                    <span class="nav__long">{item.label}</span>
+                    <span class="nav__short">{item.short}</span>
+                  </>
+                ) : (
+                  item.label
+                )}
               </a>
             ))
           }
@@ -67,7 +75,7 @@ const nav = [
           <a href={`${base}download/`}>Download</a>
           <a href={`${base}changelog/`}>Changelog</a>
           <a href={`${base}decky/`}>Decky plugin</a>
-          <a href="https://github.com/sandrocaseiro-dev/playfield-site/releases">Releases</a>
+          <a href="https://github.com/sandrocaseiro-dev/playfield-site/releases">Releases on GitHub</a>
         </p>
       </div>
     </footer>
@@ -111,6 +119,7 @@ const nav = [
   }
 
   .wordmark {
+    flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     gap: var(--s-3);
@@ -148,7 +157,19 @@ const nav = [
   }
 
   /* Three links and the wordmark have to share a phone's width. */
+  .nav__short {
+    display: none;
+  }
+
   @media (max-width: 26rem) {
+    .nav__long {
+      display: none;
+    }
+
+    .nav__short {
+      display: inline;
+    }
+
     .masthead nav {
       gap: var(--s-4);
       font-size: var(--text-micro);

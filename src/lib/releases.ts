@@ -115,25 +115,45 @@ function listed(raw: any[], tag: string): boolean {
   return raw.some((r) => r.tag_name === tag && !r.draft);
 }
 
+// Every release, following GitHub's pages until there are no more. Playfield and
+// its plugin share one release list, so a single page of fifty was a budget the
+// two spent together: each plugin release pushed an old Playfield off the
+// changelog, and nothing said so.
 async function fetchReleases(): Promise<any[] | null> {
   // The timestamp is nothing the API reads. It is here so that two builds a
   // few seconds apart cannot be answered from the same cached minute, which is
   // the whole reason a fresh release goes missing.
-  const url = `https://api.github.com/repos/${REPO}/releases?per_page=50&_=${Date.now()}`;
+  let url: string | null =
+    `https://api.github.com/repos/${REPO}/releases?per_page=100&_=${Date.now()}`;
+  const all: any[] = [];
   try {
-    const response = await fetch(url, {
-      headers: {
-        Accept: "application/vnd.github+json",
-        "Cache-Control": "no-cache",
-        ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
-      },
-    });
-    if (response.ok) return await response.json();
-    console.warn(`[releases] ${REPO} answered ${response.status}`);
+    while (url) {
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/vnd.github+json",
+          "Cache-Control": "no-cache",
+          ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
+        },
+      });
+      // A page that fails is no answer at all: half a list would publish a
+      // changelog with its oldest releases quietly gone.
+      if (!response.ok) {
+        console.warn(`[releases] ${REPO} answered ${response.status}`);
+        return null;
+      }
+      all.push(...(await response.json()));
+      url = nextPage(response.headers.get("link"));
+    }
+    return all;
   } catch (error) {
     console.warn(`[releases] could not reach GitHub (${error})`);
   }
   return null;
+}
+
+// GitHub names the following page in the Link header, and leaves it out on the last.
+function nextPage(link: string | null): string | null {
+  return link?.match(/<([^>]+)>;\s*rel="next"/)?.[1] ?? null;
 }
 
 export async function getReleases(): Promise<Release[]> {
@@ -219,16 +239,25 @@ export async function getLatest(): Promise<Release | null> {
   return releases.find((r) => !r.prerelease) ?? releases[0] ?? null;
 }
 
+// The Decky plugin's releases, without Playfield's.
+export async function getDeckyReleases(): Promise<Release[]> {
+  return (await getReleases()).filter((r) => r.product === "decky");
+}
+
 // The newest Decky plugin to offer, on the same terms: a pre-release only when
 // there is nothing else.
 export async function getLatestDecky(): Promise<Release | null> {
-  const releases = (await getReleases()).filter((r) => r.product === "decky");
+  const releases = await getDeckyReleases();
   return releases.find((r) => !r.prerelease) ?? releases[0] ?? null;
 }
 
 // The plugin ships as one zip beside its checksums.
 export function pickPluginZip(release: Release | null): ReleaseAsset | null {
   return release?.assets.find((a) => a.name.endsWith(".zip")) ?? null;
+}
+
+export function pickChecksums(release: Release | null): ReleaseAsset | null {
+  return release?.assets.find((a) => a.kind === "checksums") ?? null;
 }
 
 // The one file to offer a person on this platform, in the order a person who

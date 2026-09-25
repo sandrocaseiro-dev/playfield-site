@@ -53,9 +53,9 @@ const offered = builds
     <p class="dl__meta">
       {latest ? (
         <>
-          {latest.version}
+          Version {latest.version}
           {offered.some((b) => b.platform === "windows") && " · Windows 10 and 11"}
-          {offered.some((b) => b.platform === "linux") && " · Linux, as an AppImage or a .deb"}
+          {offered.some((b) => b.platform === "linux") && " · Linux"}
           {offered.length === 1 && ` · ${formatBytes(offered[0]!.asset!.size)}`}
         </>
       ) : (

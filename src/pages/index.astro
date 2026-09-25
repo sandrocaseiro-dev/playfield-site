@@ -7,7 +7,7 @@ import Download from "../components/Download.astro";
 import { getLatest, formatDate } from "../lib/releases";
 
 import shotDetails from "../assets/shots/details.png";
-import shotLibrary from "../assets/shots/library.png";
+import shotReconcile from "../assets/shots/reconcile.png";
 import shotCollections from "../assets/shots/collections.png";
 import shotCouch from "../assets/shots/couch-home.png";
 import shotDeals from "../assets/shots/deals.png";
@@ -17,6 +17,12 @@ import shotCheats from "../assets/shots/cheats.png";
 import shotStream from "../assets/shots/stream.png";
 import shotPrefixes from "../assets/shots/prefixes.png";
 import shotExternal from "../assets/shots/external.png";
+import shotLaunch from "../assets/shots/launch-options.png";
+import shotSaves from "../assets/shots/saves.png";
+import shotDownloads from "../assets/shots/downloads.png";
+import shotStats from "../assets/shots/stats.png";
+import shotBackup from "../assets/shots/backup.png";
+import shotMetadata from "../assets/shots/metadata.png";
 
 const base = import.meta.env.BASE_URL;
 const latest = await getLatest();
@@ -38,50 +44,82 @@ const stores = [
 const rest = [
   {
     id: "beat",
-    tab: "Playtime and progress",
-    heading: "How long it takes, and how far in you are.",
-    body: "Main story, extras, and everything — from HowLongToBeat, next to the hours you have actually played. Mark a game backlog, playing, completed or retired, and correct the hours yourself when a store has them wrong. Sign in to HowLongToBeat and your hours go onto your list there too, one game or the whole library.",
+    tab: "Playtime",
+    heading: "Playtime and time to beat.",
+    body: "HowLongToBeat times next to the hours you have played. Mark games as backlog, playing, completed or retired, and fix hours a store got wrong. Sign in to HowLongToBeat to sync your list with it.",
     shot: shotBeat,
     alt: "A game's page in Playfield, showing how long it takes to beat beside how long it has been played",
   },
   {
     id: "achievements",
     tab: "Achievements",
-    heading: "Every achievement, from every store.",
-    body: "Steam, GOG and Epic on the game's own page — and Microsoft on Windows. Played the same game on two of them? You see both records together.",
+    heading: "Achievements from Steam, GOG, Epic and Microsoft.",
+    body: "Achievements show on each game's page (Microsoft's on Windows only). If you own a game on two stores, you see both.",
     shot: shotAchievements,
-    alt: "The achievements panel, showing one game's Steam and GOG records side by side",
+    alt: "A game's achievements, with a tab each for Steam and GOG",
   },
   {
     id: "cheats",
-    tab: "Trainers and cheats",
-    heading: "Cheats, without the download hunt.",
-    body: "Get a trainer in one press — or, with a Wand account, have Playfield build the cheats itself for the copy of the game on this disk. Either way they go in when the game starts and come out when it closes, pressed from a window beside the game or from a page your phone can open.",
+    tab: "Cheats",
+    heading: "Trainers and cheats.",
+    body: "Playfield downloads trainers from FLiNG or GameCopyWorld and starts them with the game. With a Wand (WeMod) account, it can use Wand's cheats, and you turn them on from a window beside the game or from your phone.",
     shot: shotCheats,
-    alt: "A game's page with its cheats panel, naming the version and the options it carries",
+    alt: "A game's cheats: Wand's cheats for the installed version and a FLiNG trainer",
+  },
+  {
+    id: "launch",
+    tab: "Launch options",
+    heading: "Launch options, on Linux.",
+    body: "Turn on HDR or the MangoHud overlay for each game, or add your own settings.",
+    shot: shotLaunch,
+    alt: "A game's launch options on Linux: HDR and the MangoHud overlay on, plus two custom settings",
   },
   {
     id: "external",
-    tab: "Games from anywhere",
-    heading: "A program on this disk is a game in your library.",
-    body: "Point Playfield at the file. It suggests a name, looks the game up and brings back the cover and the description, and the row sits beside everything the stores gave you — played, timed and searched like any other. Nothing is moved, copied or installed, and removing it never touches the files.",
+    tab: "Games you add",
+    heading: "Add games from outside the stores.",
+    body: "Choose the game's program file and Playfield finds its cover and description. It tracks playtime and shows in search like any other game.",
     shot: shotExternal,
-    alt: "The Add a game dialog over the collections page, with the External collection behind it",
+    alt: "The Add a game dialog, where you choose the game's program",
+  },
+  {
+    id: "tidy",
+    tab: "Details and artwork",
+    heading: "Fix missing details and artwork.",
+    body: "See which games are missing a cover, description or other details, and link them to Steam or GOG to fill them in. With a free SteamGridDB key, choose any game's artwork. Hide games you don't want to see.",
+    shot: shotMetadata,
+    alt: "Settings, Metadata: five games missing details, each with what it lacks and a Link button",
+  },
+  {
+    id: "disk",
+    tab: "Disk space",
+    heading: "See what takes up your disk.",
+    body: "How much space your games use, by store, and on Windows by drive.",
+    shot: shotStats,
+    alt: "Stats: 879 GB on disk, broken down by drive and by store",
   },
   {
     id: "deals",
-    tab: "Prices worth waiting for",
-    heading: "A waitlist that knows what you already own.",
-    body: "Connect IsThereAnyDeal, watch the games you want and catch them when they drop. Your currency, your shops, a countdown on offers about to end, and a mark on anything at its lowest price yet.",
+    tab: "Deals",
+    heading: "Deals on your IsThereAnyDeal waitlist.",
+    body: "Sign in to IsThereAnyDeal to see today's prices for your waitlist, in your currency and from the shops you choose. Deals ending soon, all-time lows and games you already own are marked.",
     shot: shotDeals,
     alt: "The deals pane, showing waitlisted games at their current prices across several shops",
+  },
+  {
+    id: "backup",
+    tab: "Backup",
+    heading: "Back up your library.",
+    body: "Save your corrections, statuses, playtimes, collections, hidden games, artwork choices and launch options to one file, and restore any of them on this computer or another. API keys and sign-ins are left out unless you include them.",
+    shot: shotBackup,
+    alt: "Settings, Backup: the parts of the library that go into the backup file, each with a checkbox",
   },
 ];
 ---
 
 <Base
   title="Playfield — all your games, every store, one library"
-  description="Your games are scattered across eight stores and eight launchers. Playfield gathers them into one library you actually browse, instead of hunting for what you own. Windows and Linux."
+  description="Playfield puts the games you own on Steam, Epic, GOG, Amazon, EA, Battle.net, Ubisoft and the Microsoft Store into one library. For Windows and Linux."
 >
   <section class="hero">
     <div class="page hero__inner">
@@ -92,8 +130,7 @@ const rest = [
           <span class="hero__title-brass">Every store.<br />One place.</span>
         </h1>
         <p class="lede hero__lede">
-          Steam, Epic, GOG, Amazon, EA, Battle.net, Ubisoft and the Microsoft Store — every
-          game you own, on one shelf. On Windows, and on Linux for all but the Microsoft Store.
+          Playfield puts the games from all your stores in one library.
         </p>
 
         <Download />
@@ -118,13 +155,14 @@ const rest = [
   <section class="band" id="no-sign-in">
     <div class="page statement">
       <div>
-        <p class="eyebrow">Nothing to sign in to</p>
-        <h2>Open it. It finds your games.</h2>
+        <p class="eyebrow">Stores</p>
+        <h2>Finds the games in your store apps.</h2>
       </div>
       <div class="statement__body">
         <p class="lede">
-          No stores to connect. Playfield reads the store apps you are already signed in to on
-          this machine and fills your shelf from them.
+          Playfield reads your games from the store apps on your computer, so there are no
+          accounts to connect. If a store's app is missing, Playfield installs it. You can
+          install and uninstall games from Playfield.
         </p>
       </div>
     </div>
@@ -133,15 +171,14 @@ const rest = [
   <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
-        <p class="eyebrow">One row per game, not per purchase</p>
-        <h2>Bought twice, listed once.</h2>
+        <p class="eyebrow">Duplicates</p>
+        <h2>One entry per game, whichever stores you bought it on.</h2>
         <p class="lede">
-          The same game from three stores is one entry, not three. Press Play and it starts
-          the copy you actually have installed.
+          The Play button starts whichever copy is installed. When Playfield isn't sure two games are the same, it asks you.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotLibrary} alt="The Playfield library, with shelves for what is playing now and what to jump back into" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
+        <Image src={shotReconcile} alt="Playfield asking whether BioShock on GOG and BioShock Remastered on Steam are the same game" widths={[900, 1280]} sizes="(max-width: 60rem) 100vw, 1250px" />
       </figure>
     </div>
   </section>
@@ -149,17 +186,17 @@ const rest = [
   <section class="feature feature--flip">
     <div class="page feature__inner">
       <div class="feature__text">
-        <p class="eyebrow">A collection is a question, not a folder</p>
-        <h2>Describe the shelf. It fills itself.</h2>
+        <p class="eyebrow">Saves</p>
+        <h2>Cloud saves for every store.</h2>
         <p class="lede">
-          <code>beat&lt;15</code> is every game you could finish this month.
-          {" "}<code>store:gog -played:</code> is what you bought on GOG and never once
-          started. Write the query one time; the shelf stays right as the library changes
-          underneath it.
+          Playfield syncs your saves between computers through Google Drive, OneDrive, Dropbox, MEGA, Proton Drive, Nextcloud and other services, or a folder you choose.
+        </p>
+        <p class="lede">
+          If a save changed on two computers, you choose which one to keep. The other is kept too.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotCollections} alt="Collections in Playfield, each one a saved query over the library" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
+        <Image src={shotSaves} alt="Settings, Saves: Google Drive as the default, MEGA as a second place, and a switch for each store" widths={[900, 1280]} sizes="(max-width: 60rem) 100vw, 1250px" />
       </figure>
     </div>
   </section>
@@ -167,23 +204,15 @@ const rest = [
   <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
-        <p class="eyebrow">Windows and Linux</p>
-        <h2>On Linux, with the Windows stores still in it.</h2>
+        <p class="eyebrow">Downloads · experimental</p>
+        <h2>Download games without opening the store's app.</h2>
         <p class="lede">
-          Steam comes straight from the app you already have. GOG Galaxy, the Epic launcher,
-          Amazon Games, Ubisoft Connect, the EA app and Battle.net work on Linux too:
-          Playfield installs each one for you, on the Proton version you choose. Already run
-          one under Lutris, Heroic or Bottles? Point Playfield at it instead of installing it
-          again.
-        </p>
-        <p class="lede">
-          A game's page shows its ProtonDB rating and the Proton version it runs under, and a
-          game with a Linux version of its own is marked native. The Microsoft Store is the
-          one store Linux doesn't get.
+          Works for Amazon and Steam games. Queue downloads, pause and resume them, and limit
+          their speed.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotPrefixes} alt="Playfield's store settings on Linux, with a prefix under the GOG row and the Proton builds on this machine" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
+        <Image src={shotDownloads} alt="The library with games downloading, and the Downloads list open: one downloading, three waiting, one paused" widths={[900, 1280]} sizes="(max-width: 60rem) 100vw, 1250px" />
       </figure>
     </div>
   </section>
@@ -191,15 +220,44 @@ const rest = [
   <section class="feature feature--flip">
     <div class="page feature__inner">
       <div class="feature__text">
-        <p class="eyebrow">From the sofa</p>
-        <h2>Made for a controller and a television.</h2>
+        <p class="eyebrow">Collections</p>
+        <h2>Collections that update themselves.</h2>
         <p class="lede">
-          The same library, sized for the far side of the room and driven entirely from a
-          pad. Switch to it from the title bar, and Playfield opens in it next time.
+          Make a collection from a search, like games you can finish in under 15 hours, or GOG games you have never started.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotCouch} alt="Playfield's console shell — a wall of covers with the stores as tabs across the top" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
+        <Image src={shotCollections} alt="The Collections page: one per store, plus collections made from searches" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">Linux</p>
+        <h2>The Windows stores, on Linux.</h2>
+        <p class="lede">
+          Playfield installs GOG Galaxy, the Epic Games Launcher, Amazon Games, Ubisoft Connect, the EA app and Battle.net with a Proton version you already have, or uses the store apps you run in Lutris, Heroic or Bottles.
+        </p>
+        <p class="lede">
+          Each game shows its ProtonDB rating, and games with a Linux version are marked.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotPrefixes} alt="Store settings on Linux, choosing which Proton version runs GOG Galaxy" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature feature--flip">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">Console mode</p>
+        <h2>A full-screen view for playing on a TV with a controller.</h2>
+      </div>
+      <figure class="shot">
+        <Image src={shotCouch} alt="Console mode: a grid of game covers, with your collections as tabs across the top" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
       </figure>
     </div>
   </section>
@@ -208,23 +266,20 @@ const rest = [
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Streaming · Windows</p>
-        <h2>Your shelf, on the client in the other room.</h2>
+        <h2>Stream your games with Moonlight.</h2>
         <p class="lede">
-          Pick a collection and those games appear on your Vibepollo host on Windows, ready
-          to start from any Moonlight client. The couch shell goes over with them, so the
-          television gets the whole library.
+          Choose a collection and its installed games are added to Vibepollo, the streaming host on your computer, so you can play them with Moonlight on your TV, phone or laptop. You can open console mode from Moonlight too. You need Vibepollo installed.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotStream} alt="Playfield's Vibepollo tab, with the host address filled in and a token to paste" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
+        <Image src={shotStream} alt="Settings, Vibepollo: the address filled in and an empty token field" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
       </figure>
     </div>
   </section>
 
   <section class="rest">
     <div class="page">
-      <p class="eyebrow">Beside the launching</p>
-      <h2 class="rest__heading">The rest of what a library is for.</h2>
+      <h2 class="rest__heading">What else Playfield does.</h2>
 
       <div class="tabs" data-tabs>
         <div class="tabs__bar" role="tablist" aria-label="What else Playfield does">
@@ -277,14 +332,14 @@ const rest = [
 
   <section class="closing">
     <div class="page closing__inner">
-      <h2 class="closing__heading">Your games, wherever you bought them.</h2>
+      <h2 class="closing__heading">Download Playfield.</h2>
       <Download meta={false}>
         <a class="btn btn-quiet" href={`${base}changelog/`}>Read the changelog</a>
       </Download>
       {
         latest && (
           <p class="closing__meta">
-            {latest.version} · released {formatDate(latest.date)}
+            Version {latest.version} · released {formatDate(latest.date)}
           </p>
         )
       }
