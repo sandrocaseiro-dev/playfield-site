@@ -1,0 +1,96 @@
+---
+// The releases before the ones a page offers, each linking to its release on
+// GitHub, where every file it shipped still is. Playfield and its plugin number
+// their releases separately, so each list sits under the name of what it is.
+import { formatDate, type Release } from "../lib/releases";
+
+interface Props {
+  groups: { product: string; releases: Release[] }[];
+}
+
+const groups = Astro.props.groups.filter((group) => group.releases.length > 0);
+---
+
+{
+  groups.length > 0 && (
+    <section class="page older">
+      <h2>Earlier releases</h2>
+      <div class="older__groups">
+        {groups.map((group) => (
+          <div>
+            <h3>{group.product}</h3>
+            <ul>
+              {group.releases.map((release) => (
+                <li>
+                  <a href={release.url}>
+                    <span class="older__version">{release.version}</span>
+                    <span class="older__date">{formatDate(release.date)}</span>
+                    {release.prerelease && <span class="older__tag">pre-release</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .older {
+    padding-block: var(--s-8) var(--s-16);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .older h2 {
+    font-size: var(--text-xl);
+  }
+
+  .older__groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: var(--s-6) clamp(1.5rem, 5vw, 4rem);
+    margin-top: var(--s-6);
+  }
+
+  .older h3 {
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--track-label);
+    color: var(--brass);
+  }
+
+  .older ul {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-3) 0 0;
+  }
+
+  .older a {
+    display: flex;
+    gap: var(--s-6);
+    align-items: baseline;
+    padding-block: var(--s-3);
+    border-top: 1px solid var(--hairline);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--muted);
+  }
+
+  .older a:hover .older__version {
+    color: var(--brass);
+  }
+
+  .older__version {
+    color: var(--bone);
+    min-width: 5rem;
+  }
+
+  .older__tag {
+    color: var(--warn);
+  }
+</style>

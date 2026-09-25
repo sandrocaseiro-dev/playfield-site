@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
-import { getLatestDecky, pickPluginZip, formatBytes, formatDate } from "../lib/releases";
+import { getLatestDecky, formatDate } from "../lib/releases";
 
 import shotPage from "../assets/shots/decky/page.png";
 import shotSheet from "../assets/shots/decky/sheet.png";
@@ -11,7 +11,12 @@ import shotStores from "../assets/shots/decky/stores.png";
 
 const base = import.meta.env.BASE_URL;
 const latest = await getLatestDecky();
-const zip = pickPluginZip(latest);
+// The plugin is downloaded from the downloads page, beside Playfield, so this
+// page only points there.
+const download = `${base}download/#decky`;
+// The changelog anchors a plugin release under its prefix, so this lands on the
+// plugin's entry rather than on the Playfield release that shares its number.
+const changelog = `${base}changelog/${latest ? `#decky-${latest.version}` : ""}`;
 
 // Every shot is Steam's Game Mode at the Deck's own 1280 × 800, so they are
 // sized for the width they were taken at rather than stretched past it.
@@ -19,46 +24,44 @@ const widths = [640, 960, 1280];
 ---
 
 <Base
-  title="Playfield for Steam's Game Mode — the Decky plugin"
-  description="Browse, install and play your games from every store in Steam's Game Mode. A Decky plugin for Playfield on Linux."
+  title="Playfield's Decky plugin for Steam's Game Mode"
+  description="Install and play your GOG, Epic, Amazon, EA, Battle.net and Ubisoft games in Steam's Game Mode, on a Steam Deck or any Linux computer. A Decky plugin for Playfield."
 >
   <section class="hero">
     <div class="page hero__inner">
       <div class="hero__lockup">
-        <p class="eyebrow">Decky plugin · an add-on to Playfield</p>
+        <p class="eyebrow">Decky plugin for Playfield</p>
         <h1 class="hero__title">
-          Your whole library,<br />
+          GOG, Epic and more,<br />
           <span class="hero__title-brass">in Game Mode.</span>
         </h1>
         <p class="lede hero__lede">
-          Browse, install and play your games from GOG, Epic, Amazon, EA, Battle.net and
-          Ubisoft right inside Steam's Game Mode, next to the games you bought on Steam.
+          Install and play your GOG, Epic, Amazon, EA, Battle.net and Ubisoft games, and games
+          you added to Playfield yourself, without leaving Steam.
         </p>
 
         <div class="dl">
           {
-            zip ? (
-              <a class="btn btn-primary" href={zip.url} download>
+            latest ? (
+              <a class="btn btn-primary" href={download}>
                 Download the plugin
               </a>
             ) : (
               <span class="btn btn-quiet dl__none">No release yet</span>
             )
           }
-          <a class="btn btn-quiet" href={`${base}download/`}>Get Playfield first</a>
         </div>
         {
           latest && (
             <p class="dl__meta">
-              {latest.version} · released {formatDate(latest.date)}
-              {zip && ` · ${formatBytes(zip.size)}`}
+              Plugin {latest.version} · released {formatDate(latest.date)}
             </p>
           )
         }
       </div>
 
       <figure class="shot shot--hero">
-        <Image src={shotPage} alt="Enter the Gungeon's page in Steam's Game Mode, with an Install on Amazon button and a Playfield tab first in the row" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
+        <Image src={shotPage} alt="Enter the Gungeon's page in Game Mode, with an Install on Amazon button and a Playfield tab" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
       </figure>
     </div>
   </section>
@@ -66,18 +69,13 @@ const widths = [640, 960, 1280];
   <section class="band">
     <div class="page statement">
       <div>
-        <p class="eyebrow">An add-on to Playfield</p>
-        <h2>Set up once on the desktop. Play from the couch.</h2>
+        <p class="eyebrow">Setup</p>
+        <h2>Set up your stores in Playfield on the desktop.</h2>
       </div>
       <div class="statement__body">
         <p class="lede">
-          Playfield finds your games and sets up each store on the desktop. The plugin brings
-          that whole library into Game Mode, so finding, installing and starting a game never
-          means leaving it.
-        </p>
-        <p class="lede">
-          New games show up in Steam's library each time the plugin syncs — when Steam
-          starts, after an install, or whenever you press <em>Sync</em> — with no restart.
+          The plugin adds their games to Steam. It syncs when Steam starts, after an install,
+          and when you press <em>Sync</em> in Quick Access.
         </p>
       </div>
     </div>
@@ -86,18 +84,14 @@ const widths = [640, 960, 1280];
   <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
-        <p class="eyebrow">In Steam's library</p>
-        <h2>Every game you own, in one place.</h2>
+        <p class="eyebrow">Library</p>
+        <h2>Each store's games, with artwork and their own collection.</h2>
         <p class="lede">
-          Your games from every store sit in Steam's library with their artwork, beside the
-          ones you bought on Steam. A small store mark on each tile tells you where a game
-          came from, and games you haven't installed are faded, so what's ready to play stands
-          out. A collection for each store, and one for everything installed, makes any game
-          easy to find.
+          Games from the stores you turn on appear in Steam's library with their artwork. An icon shows which store each is from, and uninstalled games are dimmed. Each store gets its own collection, plus one for everything installed.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotLibrary} alt="A Playfield · Amazon collection in Steam's library, each tile carrying the Amazon mark and the uninstalled ones faded" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+        <Image src={shotLibrary} alt="The Playfield · Amazon collection in Steam's library: each game has an Amazon icon, and uninstalled games are dimmed" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
       </figure>
     </div>
   </section>
@@ -106,24 +100,19 @@ const widths = [640, 960, 1280];
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">On the game's page</p>
-        <h2>Install and play from the game's page.</h2>
+        <h2>A Playfield tab and an Install button on every game's page.</h2>
         <p class="lede">
-          Press <em>Install</em> and the game downloads from its store without leaving Game
-          Mode. Own it on more than one store? Pick which one. When it's ready, Steam's own
-          <em>Play</em> button starts it.
+          Install opens the store's app in Game Mode to install the game. If you own it on more than one store, choose which one. Once it is installed, Steam's <em>Play</em> button starts it.
         </p>
         <p class="lede">
-          Some stores can also download without opening their app — an experimental option
-          in the panel — with the progress on the game's page and in Steam's Downloads.
+          Experimental: Amazon games can download without opening the Amazon app. Progress shows on the game's page and in Steam's Downloads.
         </p>
         <p class="lede">
-          The <em>Playfield</em> tab opens first on every game Playfield knows, your Steam
-          games included: a description, trailers and screenshots, the stores you own it on,
-          and facts like its size, release date and critics' score.
+          Every game's page, Steam games too, gets a <em>Playfield</em> tab with the description, trailers, screenshots, the stores you own it on, size, release date and critic score.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotSheet} alt="The Playfield tab on a game's page: the description, tags, trailers and screenshots, the stores it is owned on, and its facts" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+        <Image src={shotSheet} alt="The Playfield tab on a game's page: description, tags, trailers and screenshots, the stores you own it on, release date and critic score" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
       </figure>
     </div>
   </section>
@@ -132,11 +121,9 @@ const widths = [640, 960, 1280];
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Quick Access</p>
-        <h2>Choose what shows up.</h2>
+        <h2>Choose which stores show up.</h2>
         <p class="lede">
-          Turn each store on or off from Quick Access, see how many of its games are in Steam,
-          and sync whenever you like. Turning a store off keeps its games in your library,
-          with their playtime, until you choose to remove them.
+          Turn stores on or off in Quick Access and see how many of their games are in Steam. Turning a store off leaves its games and playtime in Steam.
         </p>
       </div>
       <figure class="shot">
@@ -148,11 +135,10 @@ const widths = [640, 960, 1280];
   <section class="feature feature--flip">
     <div class="page feature__inner">
       <div class="feature__text">
-        <p class="eyebrow">The stores themselves</p>
-        <h2>Your store apps, one press away.</h2>
+        <p class="eyebrow">Stores</p>
+        <h2>Open your store apps from Game Mode.</h2>
         <p class="lede">
-          Each store's app gets its own tile. When a store asks you to sign in again, open it
-          from the couch, sign in, and close it from Steam's menu like any game.
+          Each store's app gets a tile in Steam, so you can sign in again without going to the desktop.
         </p>
       </div>
       <figure class="shot">
@@ -164,20 +150,21 @@ const widths = [640, 960, 1280];
   <section class="band">
     <div class="page statement">
       <div>
-        <p class="eyebrow">What it needs</p>
-        <h2>Playfield, and Decky.</h2>
+        <h2>What it needs</h2>
       </div>
       <div class="statement__body">
         <ol class="needs">
           <li>
-            <strong>Playfield for Linux</strong> on the same machine, with your stores set up. <a href={`${base}download/`}>Download it here.</a>
+            <strong>Playfield for Linux</strong> on the same computer, with your stores set up.{" "}
+            <a href={`${base}download/`}>Download Playfield</a>
           </li>
           <li>
             <strong>Decky Loader</strong>, which adds plugins to Steam's Game Mode.
           </li>
           <li>
-            <strong>This plugin.</strong> It isn't in Decky's store: turn on developer mode in
-            Decky's settings, then install the zip from <em>Developer</em>.
+            <strong>This plugin.</strong> It isn't in Decky's store: in Decky's settings, turn on
+            Developer mode, then install the zip from the Developer section.
+            {latest && <> <a href={download}>Download the plugin</a></>}
           </li>
         </ol>
       </div>
@@ -186,18 +173,18 @@ const widths = [640, 960, 1280];
 
   <section class="closing">
     <div class="page closing__inner">
-      <h2 class="closing__heading">Your games, on the couch.</h2>
+      <h2 class="closing__heading">Get the Decky plugin.</h2>
       <div class="dl">
         {
-          zip ? (
-            <a class="btn btn-primary" href={zip.url} download>
+          latest ? (
+            <a class="btn btn-primary" href={download}>
               Download the plugin
             </a>
           ) : (
             <a class="btn btn-primary" href={`${base}download/`}>Download Playfield</a>
           )
         }
-        <a class="btn btn-quiet" href={`${base}changelog/`}>Read the changelog</a>
+        <a class="btn btn-quiet" href={changelog}>Read the changelog</a>
       </div>
     </div>
   </section>

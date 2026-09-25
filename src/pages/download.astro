@@ -1,17 +1,37 @@
 ---
 import Base from "../layouts/Base.astro";
-import { getAppReleases, getLatest, formatBytes, formatDate, type AssetKind } from "../lib/releases";
+import EarlierReleases from "../components/EarlierReleases.astro";
+import {
+  getAppReleases,
+  getLatest,
+  getDeckyReleases,
+  getLatestDecky,
+  pickPluginZip,
+  pickChecksums,
+  formatBytes,
+  formatDate,
+  type AssetKind,
+} from "../lib/releases";
 
 const base = import.meta.env.BASE_URL;
 const releases = await getAppReleases();
 const latest = await getLatest();
 const older = releases.filter((r) => r.tag !== latest?.tag).slice(0, 8);
 
+// The Decky plugin is downloaded here too, beneath Playfield: one page for
+// everything there is to download, each under its own name and version.
+const decky = await getLatestDecky();
+const deckyFiles = [
+  { asset: pickPluginZip(decky), what: "Install it from the Developer section of Decky's settings" },
+  { asset: pickChecksums(decky), what: "Checksums for the plugin" },
+].filter((file) => file.asset !== null);
+const deckyOlder = (await getDeckyReleases()).filter((r) => r.tag !== decky?.tag).slice(0, 8);
+
 const describe: Record<AssetKind, string> = {
-  installer: "Installer — the one to take if you are unsure",
-  msi: "MSI package — for deploying without the installer's prompts",
-  appimage: "AppImage — runs on any distribution, nothing to install",
-  deb: "Debian package — for Debian, Ubuntu and anything that takes a .deb",
+  installer: "Installer (recommended)",
+  msi: "MSI package",
+  appimage: "AppImage — runs without installing. Make it executable, then open it. Use this one on a Steam Deck.",
+  deb: "Debian package — for Debian, Ubuntu and similar systems",
   checksums: "Checksums for everything above",
   other: "",
 };
@@ -23,40 +43,24 @@ const groups = [
   {
     platform: "linux" as const,
     title: "Linux",
-    note: "64-bit. The AppImage needs no install; mark it executable and open it.",
+    note: "64-bit.",
   },
 ].filter((group) => latest?.assets.some((a) => a.platform === group.platform));
 
 const loose = latest?.assets.filter((a) => a.platform === null) ?? [];
-
-// The updater names the package it is updating, so the sentence about it only
-// names the packages this release actually shipped.
-const PACKAGE_NAMES: [AssetKind, string][] = [
-  ["installer", "the installer"],
-  ["msi", "the MSI"],
-  ["appimage", "the AppImage"],
-  ["deb", "the .deb"],
-];
-const packages = PACKAGE_NAMES.filter(([kind]) =>
-  latest?.assets.some((a) => a.kind === kind),
-).map(([, name]) => name);
-const packageList = packages.length
-  ? `${packages.slice(0, -1).join(", ")} or ${packages.at(-1)}`
-  : "";
 ---
 
 <Base
   title="Download Playfield"
-  description="Playfield for Windows and Linux — installer, MSI package, AppImage, Debian package and checksums."
+  description="Download Playfield for Windows and Linux, and its Decky plugin for Steam's Game Mode."
 >
   <section class="head">
     <div class="page">
-      <p class="eyebrow">Windows and Linux, 64-bit</p>
       <h1>Download</h1>
       {
         latest ? (
           <p class="lede">
-            Version {latest.version}, released {formatDate(latest.date)}.
+            Playfield {latest.version}, released {formatDate(latest.date)}.
             {latest.headline ? ` ${latest.headline}.` : ""}
           </p>
         ) : (
@@ -66,12 +70,19 @@ const packageList = packages.length
           </p>
         )
       }
+      {
+        decky && deckyFiles.length > 0 && (
+          <p class="head__also">
+            <a href="#decky">The Decky plugin is further down.</a>
+          </p>
+        )
+      }
     </div>
   </section>
 
   {
     latest && (
-      <div class="page">
+      <div class="page app">
         {groups.map((group) => (
           <section class="platform">
             <h2>{group.title}</h2>
@@ -101,43 +112,39 @@ const packageList = packages.length
             ))}
           </div>
         )}
-
-        <section class="after">
-          <h2>After the first one</h2>
-          <p>
-            Playfield updates itself, whichever of these you took{" "}
-            {packageList && `— ${packageList}`}. It tells you when there is a newer version
-            and installs it over the one you have, so you never end up with two.
-          </p>
-          <p>
-            Your library, settings and artwork live in a <code>data</code> folder next to
-            Playfield, so a copy on a USB stick carries them with it. Where Playfield can't
-            write next to itself, as with the .deb, it uses your home folder instead. On Linux,
-            the store apps it installs stay on the machine.
-          </p>
-        </section>
       </div>
     )
   }
 
   {
-    older.length > 0 && (
-      <section class="page older">
-        <h2>Earlier releases</h2>
-        <ul>
-          {older.map((release) => (
-            <li>
-              <a href={release.url}>
-                <span class="older__version">{release.version}</span>
-                <span class="older__date">{formatDate(release.date)}</span>
-                {release.prerelease && <span class="older__tag">pre-release</span>}
-              </a>
-            </li>
+    decky && deckyFiles.length > 0 && (
+      <section class="page decky" id="decky">
+        <p class="eyebrow">For Steam's Game Mode</p>
+        <h2>Decky plugin</h2>
+        <p class="decky__note">
+          Plugin {decky.version}, released {formatDate(decky.date)}. It needs Playfield for
+          Linux on the same computer, and Decky Loader.{" "}
+          <a href={`${base}decky/`}>See what the plugin does.</a>
+        </p>
+        <div class="files">
+          {deckyFiles.map(({ asset, what }) => (
+            <a class="file" href={asset!.url} download>
+              <span class="file__name">{asset!.name}</span>
+              <span class="file__what">{what}</span>
+              <span class="file__size">{formatBytes(asset!.size)}</span>
+            </a>
           ))}
-        </ul>
+        </div>
       </section>
     )
   }
+
+  <EarlierReleases
+    groups={[
+      { product: "Playfield", releases: older },
+      { product: "Decky plugin", releases: deckyOlder },
+    ]}
+  />
 </Base>
 
 <style>
@@ -153,6 +160,20 @@ const packageList = packages.length
   .head .lede {
     margin-top: var(--s-4);
     max-width: 44rem;
+  }
+
+  .head__also {
+    margin-top: var(--s-3);
+    font-size: var(--text-sm);
+    color: var(--faint);
+  }
+
+  .head__also a {
+    color: var(--brass);
+  }
+
+  .app {
+    padding-bottom: var(--s-16);
   }
 
   .platform {
@@ -179,25 +200,25 @@ const packageList = packages.length
     margin-top: var(--s-8);
   }
 
-  .after {
+  .decky {
     padding-block: var(--s-12) var(--s-16);
-    margin-top: var(--s-16);
     border-top: 1px solid var(--hairline);
+    scroll-margin-top: var(--s-16);
   }
 
-  .after h2 {
+  .decky h2 {
     font-size: var(--text-xl);
+    margin-top: var(--s-3);
   }
 
-  .after p {
-    margin-top: var(--s-4);
+  .decky__note {
+    margin-top: var(--s-2);
+    font-size: var(--text-sm);
+    color: var(--faint);
     max-width: 44rem;
-    color: var(--muted);
   }
 
-  .after code {
-    font-family: var(--font-mono);
-    font-size: 0.9em;
+  .decky__note a {
     color: var(--brass);
   }
 
@@ -236,46 +257,6 @@ const packageList = packages.length
     font-size: var(--text-sm);
     color: var(--muted);
     white-space: nowrap;
-  }
-
-  .older {
-    padding-block: var(--s-8) var(--s-16);
-    border-top: 1px solid var(--hairline);
-  }
-
-  .older h2 {
-    font-size: var(--text-xl);
-  }
-
-  .older ul {
-    list-style: none;
-    padding: 0;
-    margin: var(--s-6) 0 0;
-  }
-
-  .older a {
-    display: flex;
-    gap: var(--s-6);
-    align-items: baseline;
-    padding-block: var(--s-3);
-    border-top: 1px solid var(--hairline);
-    text-decoration: none;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--muted);
-  }
-
-  .older a:hover .older__version {
-    color: var(--brass);
-  }
-
-  .older__version {
-    color: var(--bone);
-    min-width: 5rem;
-  }
-
-  .older__tag {
-    color: var(--warn);
   }
 
   @media (max-width: 46rem) {

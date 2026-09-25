@@ -20,16 +20,12 @@ const rendered = releases.map((release) => ({
 ---
 
 <Base
-  title="Playfield — changelog"
+  title="Playfield changelog"
   description="Every release of Playfield and its Decky plugin, and what changed in each."
 >
   <section class="head">
     <div class="page">
-      <p class="eyebrow">What changed</p>
       <h1>Changelog</h1>
-      <p class="lede">
-        Every release, and what changed in it.
-      </p>
     </div>
   </section>
 
@@ -44,7 +40,9 @@ const rendered = releases.map((release) => ({
         rendered.map((release) => (
           <article class="release" id={release.anchor}>
             <header class="release__head">
-              {release.product === "decky" && <p class="release__product">Decky plugin</p>}
+              <p class={`release__product release__product--${release.product}`}>
+                {release.product === "decky" ? "Decky plugin" : "Playfield"}
+              </p>
               <h2>
                 <a href={`#${release.anchor}`}>{release.version}</a>
               </h2>
@@ -109,6 +107,12 @@ const rendered = releases.map((release) => ({
     letter-spacing: var(--track-label);
     color: var(--brass);
     margin-bottom: var(--s-2);
+  }
+
+  /* The two version lines are unrelated, so which product an entry belongs to
+     is said on every entry, not only the plugin's. */
+  .release__product--app {
+    color: var(--muted);
   }
 
   .release__head h2 {
