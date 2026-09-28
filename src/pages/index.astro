@@ -115,12 +115,27 @@ const rest = [
     alt: "Settings, Backup: the parts of the library that go into the backup file, each with a checkbox",
   },
 ];
+
+const title = "Playfield — one game launcher for every store";
+const description =
+  "A game launcher for Windows and Linux that puts your Steam, Epic, GOG, Amazon, EA, Battle.net, Ubisoft and Microsoft Store games in one library.";
+// Tells search engines this page is a piece of software, not an article.
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Playfield",
+  description,
+  applicationCategory: "GameApplication",
+  operatingSystem: "Windows, Linux",
+  url: new URL(base, Astro.site).href,
+  downloadUrl: new URL(`${base}download/`, Astro.site).href,
+  screenshot: new URL(`${base}og.jpg`, Astro.site).href,
+  ...(latest && { softwareVersion: latest.version }),
+};
 ---
 
-<Base
-  title="Playfield — all your games, every store, one library"
-  description="Playfield puts the games you own on Steam, Epic, GOG, Amazon, EA, Battle.net, Ubisoft and the Microsoft Store into one library. For Windows and Linux."
->
+<Base title={title} description={description}>
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
   <section class="hero">
     <div class="page hero__inner">
       <div class="hero__lockup">

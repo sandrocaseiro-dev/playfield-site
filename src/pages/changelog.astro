@@ -20,7 +20,7 @@ const rendered = releases.map((release) => ({
 ---
 
 <Base
-  title="Playfield changelog"
+  title="Playfield changelog — every release and what changed"
   description="Every release of Playfield and its Decky plugin, and what changed in each."
 >
   <section class="head">
@@ -40,11 +40,18 @@ const rendered = releases.map((release) => ({
         rendered.map((release) => (
           <article class="release" id={release.anchor}>
             <header class="release__head">
-              <p class={`release__product release__product--${release.product}`}>
+              <p class={`release__product release__product--${release.product}`} aria-hidden="true">
                 {release.product === "decky" ? "Decky plugin" : "Playfield"}
               </p>
+              {/* The label above only shows the product; the heading has to name
+                  it too, or the two lines' same-numbered releases read the same. */}
               <h2>
-                <a href={`#${release.anchor}`}>{release.version}</a>
+                <a href={`#${release.anchor}`}>
+                  <span class="visually-hidden">
+                    {release.product === "decky" ? "Playfield Decky plugin " : "Playfield "}
+                  </span>
+                  {release.version}
+                </a>
               </h2>
               <p class="release__meta">
                 {formatDate(release.date)}
@@ -113,6 +120,15 @@ const rendered = releases.map((release) => ({
      is said on every entry, not only the plugin's. */
   .release__product--app {
     color: var(--muted);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .release__head h2 {
