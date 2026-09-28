@@ -47,6 +47,10 @@ build without it ships no analytics at all and still deploys. On GitHub it lives
 as a repository *variable*, not a secret — the ID is public by nature, it is in
 the page source of every visit.
 
+`PUBLIC_GOOGLE_SITE_VERIFICATION` is the `content` of the Search Console
+`google-site-verification` meta tag. Unset, the tag is left out. It is also a
+repository variable, for the same reason.
+
 ## What is where
 
 | | |
