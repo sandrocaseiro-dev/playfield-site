@@ -1,0 +1,38 @@
+---
+import Base from "../layouts/Base.astro";
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="Page not found · Playfield" description="There is no page at this address." noindex>
+  <section class="head">
+    <div class="page">
+      <h1>Page not found</h1>
+      <p class="lede">
+        There is no page at this address. Try the <a href={base}>home page</a>, the
+        {" "}<a href={`${base}download/`}>download page</a> or the
+        {" "}<a href={`${base}changelog/`}>changelog</a>.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head {
+    padding-block: var(--s-16) var(--s-24);
+  }
+
+  .head h1 {
+    font-size: var(--text-3xl);
+    margin-top: var(--s-3);
+  }
+
+  .head .lede {
+    margin-top: var(--s-4);
+    max-width: 44rem;
+  }
+
+  .head .lede a {
+    color: var(--brass);
+  }
+</style>

@@ -5,10 +5,15 @@ import Mark from "../components/Mark.astro";
 interface Props {
   title: string;
   description: string;
+  // For a page that should never turn up in search, like the 404.
+  noindex?: boolean;
 }
-const { title, description } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const here = Astro.url.pathname;
+// One address per page for search engines, whichever way a visitor arrived.
+const canonical = new URL(here, Astro.site).href;
+const ogImage = new URL(`${base}og.jpg`, Astro.site).href;
 // The measurement ID is not a secret — it ships in the page source of every
 // visit. It is read only in a production build so that `astro dev` page loads
 // stay out of the numbers, and so a local build requests nothing at all.
@@ -34,9 +39,18 @@ const nav = [
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A game's page in Playfield, showing which stores it is owned on" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    <link rel="sitemap" href={`${base}sitemap-index.xml`} />
     <meta name="theme-color" content="#0a0d14" />
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
     {googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
+    <slot name="head" />
   </head>
   <body>
     <header class="masthead">
