@@ -8,6 +8,15 @@ import shotSheet from "../assets/shots/decky/sheet.png";
 import shotLibrary from "../assets/shots/decky/library.png";
 import shotPanel from "../assets/shots/decky/panel.png";
 import shotStores from "../assets/shots/decky/stores.png";
+import shotDownloads from "../assets/shots/decky/downloads.png";
+import shotInstall from "../assets/shots/decky/install.png";
+import shotCheats from "../assets/shots/decky/cheats.png";
+import shotProton from "../assets/shots/decky/proton.png";
+import shotArtwork from "../assets/shots/decky/artwork.png";
+import shotHltb from "../assets/shots/decky/hltb.png";
+import shotSaves from "../assets/shots/decky/panel-more.png";
+import shotTabs from "../assets/shots/decky/tabs.png";
+import shotMicrosoft from "../assets/shots/decky/microsoft.png";
 
 const base = import.meta.env.BASE_URL;
 const latest = await getLatestDecky();
@@ -21,11 +30,63 @@ const changelog = `${base}changelog/${latest ? `#decky-${latest.version}` : ""}`
 // Every shot is Steam's Game Mode at the Deck's own 1280 × 800, so they are
 // sized for the width they were taken at rather than stretched past it.
 const widths = [640, 960, 1280];
+
+// The panes of the tabbed section, each a screen of Game Mode.
+const rest = [
+  {
+    id: "cheats",
+    tab: "Cheats",
+    heading: "Cheats and trainers.",
+    body: "Build a game's cheats from Steam's page, for Steam games and store games in standalone mode, and turn them on from Quick Access while it runs, laid out as the trainer draws them. Trainers can be found, downloaded and deleted from the page too.",
+    shot: shotCheats,
+    alt: "DAVE THE DIVER's cheats in Game Mode: 33 built-in cheats, Build them again, Delete and Get a trainer",
+  },
+  {
+    id: "saves",
+    tab: "Saves",
+    heading: "Cloud saves in Game Mode.",
+    body: "A game's save is brought down before you play and sent after, whichever button started it. If two computers both changed it, Steam asks which to keep. Steam games show Steam Cloud's status, each kept save can be moved on its own, and Quick Access shows where saves go and what is waiting to be sent.",
+    shot: shotSaves,
+    alt: "The Playfield panel in Quick Access: the Microsoft Store through ferestre, saves going to Google Drive, and the library's sync, tabs and HowLongToBeat rows",
+  },
+  {
+    id: "proton",
+    tab: "Proton",
+    heading: "Proton and launch settings.",
+    body: "Choose the Proton version a Steam game runs under, or a store game's in a prefix of its own when its store runs standalone. Change a game's launch settings: HDR, the MangoHud overlay and your own. Each store's Proton version is chosen in Quick Access.",
+    shot: shotProton,
+    alt: "Runs under for Moonlighter in Game Mode: a list of Proton versions, shared with GOG or in its own prefix",
+  },
+  {
+    id: "artwork",
+    tab: "Artwork",
+    heading: "Change any game's artwork.",
+    body: "With a free SteamGridDB key, choose a game's cover, icon, hero, logo and header, Steam's own games included. Your pick shows in Playfield on the desktop too.",
+    shot: shotArtwork,
+    alt: "Moonlighter's artwork in Game Mode: its cover, icon, hero, logo and header, with store art and SteamGridDB images to choose from",
+  },
+  {
+    id: "hltb",
+    tab: "HowLongToBeat",
+    heading: "HowLongToBeat in Game Mode.",
+    body: "Mark a game backlog, playing, completed or retired, and link it to HowLongToBeat. Sign in from Steam's browser to send your play, Steam games' too.",
+    shot: shotHltb,
+    alt: "Moonlighter's Where you are menu: Backlog, Playing, Completed, Retired and Link HowLongToBeat",
+  },
+  {
+    id: "microsoft",
+    tab: "Microsoft Store",
+    heading: "Microsoft Store games.",
+    body: "Install, play and update Microsoft Store games through ferestre, and sign in to Microsoft from Game Mode.",
+    shot: shotMicrosoft,
+    alt: "Wolfenstein: The Old Blood's page in Game Mode, with Play on Microsoft",
+  },
+];
 ---
 
 <Base
   title="Playfield's Decky plugin for Steam's Game Mode"
-  description="A Decky plugin for Playfield: install and play your GOG, Epic, Amazon, EA, Battle.net and Ubisoft games in Game Mode on a Steam Deck or Linux PC."
+  description="A Decky plugin for Playfield: install and play your GOG, Epic, Amazon, EA, Battle.net, Ubisoft and Microsoft Store games in Game Mode on a Steam Deck or Linux PC."
 >
   <section class="hero">
     <div class="page hero__inner">
@@ -36,8 +97,8 @@ const widths = [640, 960, 1280];
           <span class="hero__title-brass">in Game Mode.</span>
         </h1>
         <p class="lede hero__lede">
-          Install and play your GOG, Epic, Amazon, EA, Battle.net and Ubisoft games, and games
-          you added to Playfield yourself, without leaving Steam.
+          Install and play your GOG, Epic, Amazon, EA, Battle.net, Ubisoft and Microsoft Store
+          games, and games you added to Playfield yourself, without leaving Steam.
         </p>
 
         <div class="dl">
@@ -61,23 +122,8 @@ const widths = [640, 960, 1280];
       </div>
 
       <figure class="shot shot--hero">
-        <Image src={shotPage} alt="Enter the Gungeon's page in Game Mode, with an Install on Amazon button and a Playfield tab" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
+        <Image src={shotPage} alt="Enter the Gungeon's page in Game Mode: its logo, description and facts, an Install on Amazon button and a Playfield tab" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
       </figure>
-    </div>
-  </section>
-
-  <section class="band">
-    <div class="page statement">
-      <div>
-        <p class="eyebrow">Setup</p>
-        <h2>Set up your stores in Playfield on the desktop.</h2>
-      </div>
-      <div class="statement__body">
-        <p class="lede">
-          The plugin adds their games to Steam. It syncs when Steam starts, after an install,
-          and when you press <em>Sync</em> in Quick Access.
-        </p>
-      </div>
     </div>
   </section>
 
@@ -87,7 +133,7 @@ const widths = [640, 960, 1280];
         <p class="eyebrow">Library</p>
         <h2>Each store's games, with artwork and their own collection.</h2>
         <p class="lede">
-          Games from the stores you turn on appear in Steam's library with their artwork. An icon shows which store each is from, and uninstalled games are dimmed. Each store gets its own collection, plus one for everything installed.
+          Games from the stores you turn on appear in Steam's library with their artwork. Each tile shows which stores you own the game on, and games that aren't installed are dimmed and read <em>Not installed</em> on Home. Each store gets its own collection, plus one for everything installed.
         </p>
       </div>
       <figure class="shot">
@@ -99,20 +145,14 @@ const widths = [640, 960, 1280];
   <section class="feature feature--flip">
     <div class="page feature__inner">
       <div class="feature__text">
-        <p class="eyebrow">On the game's page</p>
-        <h2>A Playfield tab and an Install button on every game's page.</h2>
+        <p class="eyebrow">Library tabs</p>
+        <h2>Arrange Steam's library tabs.</h2>
         <p class="lede">
-          Install opens the store's app in Game Mode to install the game. If you own it on more than one store, choose which one. Once it is installed, Steam's <em>Play</em> button starts it.
-        </p>
-        <p class="lede">
-          Experimental: Amazon games can download without opening the Amazon app. Progress shows on the game's page and in Steam's Downloads.
-        </p>
-        <p class="lede">
-          Every game's page, Steam games too, gets a <em>Playfield</em> tab with the description, trailers, screenshots, the stores you own it on, size, release date and critic score.
+          Reorder and hide Steam's library tabs, and add any collection as a tab, such as a store's. Nothing of Steam's is deleted, and <em>Back to Steam's order</em> undoes it all.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotSheet} alt="The Playfield tab on a game's page: description, tags, trailers and screenshots, the stores you own it on, release date and critic score" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+        <Image src={shotTabs} alt="Library tabs in Quick Access: Steam's own tabs in order, Add a collection and Back to Steam's order" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
       </figure>
     </div>
   </section>
@@ -120,19 +160,76 @@ const widths = [640, 960, 1280];
   <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
-        <p class="eyebrow">Quick Access</p>
-        <h2>Choose which stores show up.</h2>
+        <p class="eyebrow">On the game's page</p>
+        <h2>Install, play and uninstall from Steam's page.</h2>
         <p class="lede">
-          Turn stores on or off in Quick Access and see how many of their games are in Steam. Turning a store off leaves its games and playtime in Steam.
+          Install opens the store's app in Game Mode to install the game. If you own it on more than one store, choose which one, and for a GOG game its language and DLC. Once it is installed, Steam's <em>Play</em> button starts it.
+        </p>
+        <p class="lede">
+          <em>Uninstall</em> in the game's <em>Manage</em> menu removes the game and keeps its Steam entry, playtime and controller layout.
+        </p>
+        <p class="lede">
+          Experimental: games from a store in Playfield's standalone mode download without opening the store's app, with Pause, Resume and Cancel. <em>Update</em> appears next to <em>Play</em> when a new version is out, and <em>Check the files</em> is in the <em>Manage</em> menu.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotPanel} alt="The Playfield panel in Quick Access, with a switch and a game count for each store" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+        <Image src={shotInstall} alt="The Abandoned Planet's page in Game Mode, not installed, with an Install on Amazon button" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
       </figure>
     </div>
   </section>
 
   <section class="feature feature--flip">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">Playfield tab</p>
+        <h2>A Playfield tab on every game's page.</h2>
+        <p class="lede">
+          Every game's page, Steam games too, gets a <em>Playfield</em> tab with its description, trailers, screenshots, the stores you own it on and its achievements. The page shows the ProtonDB rating, and Steam shows Playfield's playtime. <em>Everything about it</em> in the game's menu opens the same panels.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotSheet} alt="The Playfield tab on DAVE THE DIVER's page: trailers, the store it is owned on, where you are, saves and cheats" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">Downloads and updates</p>
+        <h2>Updates in Steam's Downloads.</h2>
+        <p class="lede">
+          Playfield's downloads and updates show in Steam's Downloads screen, on the game's tile and on Home. Updates have patch notes where the store publishes them, and can start one at a time or all at once.
+        </p>
+        <p class="lede">
+          Choose how each game updates, and whether downloads keep going while it runs. An install that runs out of space can move to another drive.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotDownloads} alt="Steam's Downloads screen in Game Mode, with Diablo IV and Down in Bermuda under Not scheduled and an Update all button" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature feature--flip">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">Quick Access</p>
+        <h2>Choose which stores show up.</h2>
+        <p class="lede">
+          Turn stores on or off in Quick Access and see how many of their games are in Steam. Turning a store off leaves its games and playtime in Steam until you remove them.
+        </p>
+        <p class="lede">
+          Quick Access also lists waiting downloads and updates.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotPanel} alt="The Playfield panel in Quick Access: two waiting updates, and a switch and a game count for each store" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Stores</p>
@@ -142,8 +239,54 @@ const widths = [640, 960, 1280];
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotStores} alt="The Playfield · Stores collection: tiles for Amazon Games, Battle.net, EA, the Epic Games Store, GOG Galaxy and Ubisoft Connect" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+        <Image src={shotStores} alt="The Playfield · Stores collection: tiles for Amazon Games, Battle.net, EA, the Epic Games Store, the Microsoft Store, GOG Galaxy and Ubisoft Connect" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
       </figure>
+    </div>
+  </section>
+
+  <section class="rest">
+    <div class="page">
+      <h2 class="rest__heading">What else the plugin does.</h2>
+
+      <div class="tabs" data-tabs>
+        <div class="tabs__bar" role="tablist" aria-label="What else the plugin does">
+          {
+            rest.map((pane, i) => (
+              <button
+                class="tabs__tab"
+                role="tab"
+                type="button"
+                id={`tab-${pane.id}`}
+                aria-controls={`pane-${pane.id}`}
+                aria-selected={i === 0 ? "true" : "false"}
+                tabindex={i === 0 ? 0 : -1}
+              >
+                {pane.tab}
+              </button>
+            ))
+          }
+        </div>
+
+        {
+          rest.map((pane) => (
+            <div
+              class="tabs__pane"
+              role="tabpanel"
+              id={`pane-${pane.id}`}
+              aria-labelledby={`tab-${pane.id}`}
+              tabindex="0"
+            >
+              <div class="tabs__text">
+                <h3>{pane.heading}</h3>
+                <p>{pane.body}</p>
+              </div>
+              <figure class="shot">
+                <Image src={pane.shot} alt={pane.alt} widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" loading="lazy" />
+              </figure>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </section>
 
@@ -189,6 +332,43 @@ const widths = [640, 960, 1280];
     </div>
   </section>
 </Base>
+
+<script>
+  // The panes are all in the document and all visible until this runs, so the
+  // section reads as stacked sections without JavaScript and collapses to
+  // one at a time with it.
+  for (const root of document.querySelectorAll<HTMLElement>("[data-tabs]")) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panes = tabs.map((tab) =>
+      document.getElementById(tab.getAttribute("aria-controls")!),
+    );
+
+    const show = (index: number, focus: boolean) => {
+      tabs.forEach((tab, i) => {
+        const on = i === index;
+        tab.setAttribute("aria-selected", on ? "true" : "false");
+        tab.tabIndex = on ? 0 : -1;
+        panes[i]?.toggleAttribute("hidden", !on);
+      });
+      if (focus) tabs[index]!.focus();
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => show(i, false));
+      tab.addEventListener("keydown", (event) => {
+        const step = { ArrowRight: 1, ArrowLeft: -1, Home: -i, End: tabs.length - 1 - i }[
+          event.key
+        ];
+        if (step === undefined) return;
+        event.preventDefault();
+        show((i + step + tabs.length) % tabs.length, true);
+      });
+    });
+
+    root.dataset.live = "true";
+    show(0, false);
+  }
+</script>
 
 <style>
   /* Hero ---------------------------------------------------------------- */
@@ -333,6 +513,98 @@ const widths = [640, 960, 1280];
 
   .feature__text .lede {
     margin-top: var(--s-6);
+  }
+
+  /* The tabbed section --------------------------------------------------- */
+
+  .rest {
+    padding-block: var(--s-24);
+    border-top: 1px solid var(--hairline);
+    margin-top: var(--s-24);
+  }
+
+  .rest__heading {
+    font-size: var(--text-2xl);
+    margin-top: var(--s-4);
+    max-width: 30rem;
+  }
+
+  /* A segmented control rather than a row of underlined words — the shape the
+     application itself uses wherever one of a few states is current. */
+  .tabs__bar {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--s-1);
+    margin-top: var(--s-12);
+    padding: var(--s-1);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--slate);
+  }
+
+  .tabs__tab {
+    appearance: none;
+    background: none;
+    border: 0;
+    border-radius: var(--radius);
+    padding: var(--s-3) var(--s-6);
+    font: inherit;
+    font-size: var(--text-sm);
+    line-height: 1.2;
+    color: var(--faint);
+    cursor: pointer;
+    transition: background 140ms ease, color 140ms ease;
+  }
+
+  .tabs__tab:hover {
+    background: var(--slate-hi);
+    color: var(--bone);
+  }
+
+  .tabs__tab:focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 2px;
+  }
+
+  .tabs__tab[aria-selected="true"],
+  .tabs__tab[aria-selected="true"]:hover {
+    background: var(--brass);
+    color: var(--on-accent);
+    font-weight: 600;
+  }
+
+  .tabs__pane {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    padding-top: var(--s-12);
+  }
+
+  /* Without the script every pane stays in the flow, so each one needs the rule
+     the tab bar would otherwise draw between them. */
+  .tabs:not([data-live]) .tabs__pane + .tabs__pane {
+    border-top: 1px solid var(--hairline);
+  }
+
+  .tabs__pane[hidden] {
+    display: none;
+  }
+
+  .tabs__pane:focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: var(--s-4);
+  }
+
+  .tabs__text {
+    max-width: 44rem;
+  }
+
+  .tabs__text h3 {
+    font-size: var(--text-xl);
+  }
+
+  .tabs__text p {
+    margin-top: var(--s-4);
+    color: var(--muted);
   }
 
   /* Closing -------------------------------------------------------------- */

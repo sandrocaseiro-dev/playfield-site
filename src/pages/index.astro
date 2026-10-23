@@ -19,6 +19,7 @@ import shotPrefixes from "../assets/shots/prefixes.png";
 import shotExternal from "../assets/shots/external.png";
 import shotLaunch from "../assets/shots/launch-options.png";
 import shotSaves from "../assets/shots/saves.png";
+import shotSavesKept from "../assets/shots/saves-kept.png";
 import shotDownloads from "../assets/shots/downloads.png";
 import shotStats from "../assets/shots/stats.png";
 import shotBackup from "../assets/shots/backup.png";
@@ -62,17 +63,17 @@ const rest = [
     id: "cheats",
     tab: "Cheats",
     heading: "Trainers and cheats.",
-    body: "Playfield downloads trainers from FLiNG or GameCopyWorld and starts them with the game. With a Wand (WeMod) account, it can use Wand's cheats, and you turn them on from a window beside the game or from your phone.",
+    body: "Playfield downloads trainers from FLiNG or GameCopyWorld and starts them with the game. With a Wand (WeMod) account, it builds Wand's cheats for the copy on your disk, laid out as the trainer draws them, and you turn them on from a window beside the game or from your phone.",
     shot: shotCheats,
-    alt: "A game's cheats: Wand's cheats for the installed version and a FLiNG trainer",
+    alt: "A game's cheats: 24 built-in cheats from Wand, Wand itself and a FLiNG trainer",
   },
   {
     id: "launch",
     tab: "Launch options",
-    heading: "Launch options, on Linux.",
-    body: "Turn on HDR or the MangoHud overlay for each game, or add your own settings.",
+    heading: "Launch options and Proton, on Linux.",
+    body: "Turn on HDR or the MangoHud overlay for each game, or add your own settings. Choose the Proton version a Steam game runs under, or any store's game in standalone mode.",
     shot: shotLaunch,
-    alt: "A game's launch options on Linux: HDR and the MangoHud overlay on, plus two custom settings",
+    alt: "A game's page on Linux: its Proton version being chosen, above HDR and the MangoHud overlay",
   },
   {
     id: "external",
@@ -94,9 +95,17 @@ const rest = [
     id: "disk",
     tab: "Disk space",
     heading: "See what takes up your disk.",
-    body: "How much space your games use, by store, and on Windows by drive.",
+    body: "How much space your games use, by store and by drive.",
     shot: shotStats,
     alt: "Stats: 879 GB on disk, broken down by drive and by store",
+  },
+  {
+    id: "kept",
+    tab: "Kept saves",
+    heading: "Every kept save, and where it is.",
+    body: "Each game's saves show whether they are on this computer, in your cloud or both. Delete, send or bring back any one copy.",
+    shot: shotSavesKept,
+    alt: "Hollow Knight's saves: each one's date, and its size on this machine and on Google Drive",
   },
   {
     id: "deals",
@@ -162,7 +171,7 @@ const structuredData = {
       </div>
 
       <figure class="shot shot--hero">
-        <Image src={shotDetails} alt="A game's page in Playfield, showing which stores it is owned on" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
+        <Image src={shotDetails} alt="A game's page in Playfield: Play on GOG, playtime, time to beat and GOG cloud status, and the Proton version and settings it starts with" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
       </figure>
     </div>
   </section>
@@ -207,6 +216,9 @@ const structuredData = {
           Playfield syncs your saves between computers through Google Drive, OneDrive, Dropbox, MEGA, Proton Drive, Nextcloud and other services, or a folder you choose.
         </p>
         <p class="lede">
+          Playfield finds each game's save on your disk, even before you play it. Games your store already syncs are left to it unless you turn them on.
+        </p>
+        <p class="lede">
           If a save changed on two computers, you choose which one to keep. The other is kept too.
         </p>
       </div>
@@ -219,15 +231,20 @@ const structuredData = {
   <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
-        <p class="eyebrow">Downloads · experimental</p>
-        <h2>Download games without opening the store's app.</h2>
+        <p class="eyebrow">Downloads</p>
+        <h2>A Downloads tab like Steam's, for every store.</h2>
         <p class="lede">
-          Works for Amazon and Steam games. Queue downloads, pause and resume them, and limit
-          their speed.
+          See what is downloading, what is next and what finished this week. Updates from Steam,
+          GOG, Amazon, Battle.net and stores in standalone mode wait for the hours you choose.
+        </p>
+        <p class="lede">
+          Experimental: in standalone mode, Playfield installs, updates and uninstalls Steam,
+          Amazon, GOG, Epic, Battle.net, Ubisoft and EA games without opening the store's app.
+          Pause and resume downloads, and limit their speed.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotDownloads} alt="The library with games downloading, and the Downloads list open: one downloading, three waiting, one paused" widths={[900, 1280]} sizes="(max-width: 60rem) 100vw, 1250px" />
+        <Image src={shotDownloads} alt="The Downloads tab: Silksong downloading with a speed graph, a second game downloading, and two games the stores' own apps are installing" widths={[900, 1280]} sizes="(max-width: 60rem) 100vw, 1250px" />
       </figure>
     </div>
   </section>
@@ -256,6 +273,10 @@ const structuredData = {
           Playfield installs GOG Galaxy, the Epic Games Launcher, Amazon Games, Ubisoft Connect, the EA app and Battle.net with a Proton version you already have, or uses the store apps you run in Lutris, Heroic or Bottles.
         </p>
         <p class="lede">
+          Microsoft Store games install and play too, through ferestre, which you install from
+          Playfield's settings.
+        </p>
+        <p class="lede">
           Each game shows its ProtonDB rating, and games with a Linux version are marked.
         </p>
       </div>
@@ -270,9 +291,13 @@ const structuredData = {
       <div class="feature__text">
         <p class="eyebrow">Console mode</p>
         <h2>A full-screen view for playing on a TV with a controller.</h2>
+        <p class="lede">
+          Each game's page has everything about it: its status, launch settings, saves and cheats.
+          Filter the library with the controller by store, status, genre and tag.
+        </p>
       </div>
       <figure class="shot">
-        <Image src={shotCouch} alt="Console mode: a grid of game covers, with your collections as tabs across the top" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
+        <Image src={shotCouch} alt="Console mode: the library as a grid of game covers, with your collections as tabs across the top" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1250px" />
       </figure>
     </div>
   </section>
