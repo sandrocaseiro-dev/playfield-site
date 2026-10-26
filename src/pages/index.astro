@@ -73,7 +73,7 @@ const rest = [
     heading: "Launch options and Proton, on Linux.",
     body: "Turn on HDR or the MangoHud overlay for each game, or add your own settings. Choose the Proton version a Steam game runs under, or any store's game in standalone mode.",
     shot: shotLaunch,
-    alt: "A game's page on Linux: its Proton version being chosen, above HDR and the MangoHud overlay",
+    alt: "A game's How it runs panel on Linux: its Proton version being chosen, above HDR and the MangoHud overlay",
   },
   {
     id: "external",
@@ -95,9 +95,9 @@ const rest = [
     id: "disk",
     tab: "Disk space",
     heading: "See what takes up your disk.",
-    body: "How much space your games use, by store and by drive.",
+    body: "How much space your games use, by store and by drive, and every installed game by size, with its folder and Uninstall beside it. A game's page shows its size before you install it.",
     shot: shotStats,
-    alt: "Stats: 879 GB on disk, broken down by drive and by store",
+    alt: "Stats: space used by each store, then every installed game, largest first, with its size, its folder and an Uninstall button",
   },
   {
     id: "kept",
@@ -171,7 +171,7 @@ const structuredData = {
       </div>
 
       <figure class="shot shot--hero">
-        <Image src={shotDetails} alt="A game's page in Playfield: Play on GOG, playtime, time to beat and GOG cloud status, and the Proton version and settings it starts with" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
+        <Image src={shotDetails} alt="A game's page in Playfield: Play on GOG, playtime, time to beat, its size on disk and which clouds sync its saves, and how it runs: the Proton version and settings it starts with" widths={[900, 1400, 1920]} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
       </figure>
     </div>
   </section>
@@ -217,6 +217,9 @@ const structuredData = {
         </p>
         <p class="lede">
           Playfield finds each game's save on your disk, even before you play it. Games your store already syncs are left to it unless you turn them on.
+        </p>
+        <p class="lede">
+          Each game's page shows whose cloud syncs its save, the store's, Playfield's or both, and whether it is synced.
         </p>
         <p class="lede">
           If a save changed on two computers, you choose which one to keep. The other is kept too.
