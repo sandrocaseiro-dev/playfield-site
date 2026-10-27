@@ -37,7 +37,7 @@ const rest = [
     id: "cheats",
     tab: "Cheats",
     heading: "Cheats and trainers.",
-    body: "Build a game's cheats from its Playfield… page, for Steam games and store games in standalone mode, and turn them on from Quick Access while it runs, laid out as the trainer draws them. Trainers can be found, downloaded and deleted there too.",
+    body: "Build a game's cheats from its Playfield… page, for Steam games and store games in standalone mode, and turn them on from Quick Access while it runs. Find, download and delete trainers on the same page.",
     shot: shotCheats,
     alt: "DAVE THE DIVER's Playfield… page in Game Mode, on Cheats: 33 built-in cheats, Build them again, Delete and Get a trainer",
   },
@@ -45,7 +45,7 @@ const rest = [
     id: "saves",
     tab: "Saves",
     heading: "Cloud saves in Game Mode.",
-    body: "A game's save is brought down before you play and sent after, whichever button started it. If two computers both changed it, Steam asks which to keep. The game's page shows whose cloud syncs its save and whether it is synced. Each kept save can be moved on its own, and Quick Access shows what is waiting to be sent.",
+    body: "A game's save is brought down before you play and sent after, whichever button started it. If two computers both changed it, Steam asks which to keep. Choose where saves go for all games, a store or one game, and how many are kept.",
     shot: shotSaves,
     alt: "The Playfield panel in Quick Access: Sync now, two waiting updates, seven of eight stores on, saves going to Google Drive with everything sent, library tabs and HowLongToBeat",
   },
@@ -53,7 +53,7 @@ const rest = [
     id: "proton",
     tab: "Proton",
     heading: "Proton and launch settings.",
-    body: "On a game's Playfield… page, choose the Proton version a Steam game runs under, or a store game's in a prefix of its own when its store runs standalone, and change its launch settings: HDR, the MangoHud overlay and your own. Each store's Proton version is chosen on its page in Quick Access.",
+    body: "On a game's Playfield… page, turn on HDR or the MangoHud overlay, or add your own launch settings. Steam games, and store games in standalone mode, can each run under their own Proton version. Other store games use their store's, chosen in Quick Access.",
     shot: shotProton,
     alt: "Runs under for Moonlighter, from its Playfield… page: a list of Proton versions, shared with GOG or in its own prefix",
   },
@@ -69,7 +69,7 @@ const rest = [
     id: "hltb",
     tab: "HowLongToBeat",
     heading: "HowLongToBeat in Game Mode.",
-    body: "Mark a game backlog, playing, completed or retired from its menu, and link it to HowLongToBeat on its Playfield… page. Sign in from Steam's browser to send your play, Steam games' too.",
+    body: "Mark a game backlog, playing, completed or retired from its menu, and link it to HowLongToBeat on its Playfield… page. Sign in from Steam's browser to send your playtime, Steam games included.",
     shot: shotHltb,
     alt: "Moonlighter's game menu in Game Mode: Where you are open on Backlog, Playing, Completed and Retired, with Saves, Change artwork and Playfield… below",
   },
@@ -77,7 +77,7 @@ const rest = [
     id: "microsoft",
     tab: "Microsoft Store",
     heading: "Microsoft Store games.",
-    body: "Install, play and update Microsoft Store games through ferestre, and sign in to Microsoft from Game Mode.",
+    body: "Experimental: install, play and uninstall Microsoft Store games through ferestre.",
     shot: shotMicrosoft,
     alt: "Wolfenstein: The Old Blood's page in Game Mode, with Play on Microsoft",
   },
@@ -86,7 +86,7 @@ const rest = [
 
 <Base
   title="Playfield's Decky plugin for Steam's Game Mode"
-  description="A Decky plugin for Playfield: install and play your GOG, Epic, Amazon, EA, Battle.net, Ubisoft and Microsoft Store games in Game Mode on a Steam Deck or Linux PC."
+  description="A Decky plugin for Playfield: install and play your GOG, Epic, Amazon, Battle.net, Ubisoft and Microsoft Store games in Game Mode on a Steam Deck or Linux PC."
 >
   <section class="hero">
     <div class="page hero__inner">
@@ -97,7 +97,7 @@ const rest = [
           <span class="hero__title-brass">in Game Mode.</span>
         </h1>
         <p class="lede hero__lede">
-          Install and play your GOG, Epic, Amazon, EA, Battle.net, Ubisoft and Microsoft Store
+          Install and play your GOG, Epic, Amazon, Battle.net, Ubisoft and Microsoft Store
           games, and games you added to Playfield yourself, without leaving Steam.
         </p>
 
@@ -133,7 +133,7 @@ const rest = [
         <p class="eyebrow">Library</p>
         <h2>Each store's games, with artwork and their own collection.</h2>
         <p class="lede">
-          Games from the stores you turn on appear in Steam's library with their artwork. Each tile shows which stores you own the game on, and games that aren't installed are dimmed and read <em>Not installed</em> on Home. Each store gets its own collection, plus one for all your games and one for everything installed.
+          Games from the stores you turn on appear in Steam's library with their artwork, without restarting Steam, and Steam shows Playfield's playtime. Each tile shows which stores you own the game on. Each store gets its own collection, plus one for all your games and one for everything installed.
         </p>
         <p class="lede">
           Your Playfield collections show in Steam too. Add a game to one in Steam or take one out, and the collection changes in Playfield. Collections made from a search stay as Playfield fills them.
@@ -166,13 +166,13 @@ const rest = [
         <p class="eyebrow">On the game's page</p>
         <h2>Install, play and uninstall from Steam's page.</h2>
         <p class="lede">
-          Before you install a game, its page shows its size and the Proton version it will run under. Install opens the store's app in Game Mode to install the game. If you own it on more than one store, choose which one, and for a GOG game its language and DLC. Once it is installed, Steam's <em>Play</em> button starts it.
+          Before you install a game, its page shows its size and the Proton version it will run under. For most stores, Install opens the store's app in Game Mode to install the game. If you own it on more than one store, choose which one. Once it is installed, Steam's <em>Play</em> button starts it. EA games install and uninstall, but don't start from Game Mode yet.
         </p>
         <p class="lede">
           <em>Uninstall</em> in the game's <em>Manage</em> menu removes the game and keeps its Steam entry, playtime and controller layout.
         </p>
         <p class="lede">
-          Experimental: games from a store in Playfield's standalone mode download without opening the store's app, with Pause, Resume and Cancel. <em>Update</em> appears next to <em>Play</em> when a new version is out, and <em>Check the files</em> is in the <em>Manage</em> menu.
+          Experimental: games from a store in Playfield's standalone mode download without opening the store's app, with Pause, Resume and Cancel. A GOG game asks for its language and DLC first. <em>Update</em> appears next to <em>Play</em> when a new version is out, and <em>Check the files</em> is in the <em>Manage</em> menu.
         </p>
       </div>
       <figure class="shot">
