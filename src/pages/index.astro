@@ -63,7 +63,7 @@ const rest = [
     id: "cheats",
     tab: "Cheats",
     heading: "Trainers and cheats.",
-    body: "Playfield downloads trainers from FLiNG or GameCopyWorld and starts them with the game. With a Wand (WeMod) account, it builds Wand's cheats for the copy on your disk, laid out as the trainer draws them, and you turn them on from a window beside the game or from your phone.",
+    body: "Playfield downloads trainers from FLiNG or GameCopyWorld and starts them with the game, on Windows and on Linux under Proton. With a Wand (WeMod) account, it builds Wand's cheats for your game, and you turn them on from a window beside the game or from your phone.",
     shot: shotCheats,
     alt: "A game's cheats: 24 built-in cheats from Wand, Wand itself and a FLiNG trainer",
   },
@@ -71,7 +71,7 @@ const rest = [
     id: "launch",
     tab: "Launch options",
     heading: "Launch options and Proton, on Linux.",
-    body: "Turn on HDR or the MangoHud overlay for each game, or add your own settings. Choose the Proton version a Steam game runs under, or any store's game in standalone mode.",
+    body: "Turn on HDR or the MangoHud overlay for each game, or add your own settings. Choose the Proton version each Steam game runs under. In the experimental standalone mode, any store's game can have its own.",
     shot: shotLaunch,
     alt: "A game's How it runs panel on Linux: its Proton version being chosen, above HDR and the MangoHud overlay",
   },
@@ -87,7 +87,7 @@ const rest = [
     id: "tidy",
     tab: "Details and artwork",
     heading: "Fix missing details and artwork.",
-    body: "See which games are missing a cover, description or other details, and link them to Steam or GOG to fill them in. With a free SteamGridDB key, choose any game's artwork. Hide games you don't want to see.",
+    body: "See which games are missing a cover, description or other details, and link them to Steam, GOG or Games DB to fill them in. With a free SteamGridDB key, choose any game's artwork. Hide games you don't want to see.",
     shot: shotMetadata,
     alt: "Settings, Metadata: five games missing details, each with what it lacks and a Link button",
   },
@@ -111,7 +111,7 @@ const rest = [
     id: "deals",
     tab: "Deals",
     heading: "Deals on your IsThereAnyDeal waitlist.",
-    body: "Sign in to IsThereAnyDeal to see today's prices for your waitlist, in your currency and from the shops you choose. Deals ending soon, all-time lows and games you already own are marked.",
+    body: "Connect your IsThereAnyDeal account to see today's prices for your waitlist, in your currency and from the shops you choose. Deals ending soon, all-time lows and games you already own are marked.",
     shot: shotDeals,
     alt: "The deals pane, showing waitlisted games at their current prices across several shops",
   },
@@ -185,7 +185,7 @@ const structuredData = {
       <div class="statement__body">
         <p class="lede">
           Playfield reads your games from the store apps on your computer, so there are no
-          accounts to connect. If a store's app is missing, Playfield installs it. You can
+          accounts to connect. If a store's app is missing, Playfield installs it, except Steam on Linux, which comes from your distribution. You can
           install and uninstall games from Playfield.
         </p>
       </div>
@@ -216,10 +216,10 @@ const structuredData = {
           Playfield syncs your saves between computers through Google Drive, OneDrive, Dropbox, MEGA, Proton Drive, Nextcloud and other services, or a folder you choose.
         </p>
         <p class="lede">
-          Playfield finds each game's save on your disk, even before you play it. Games your store already syncs are left to it unless you turn them on.
+          Playfield finds each game's save on your disk, even before you play it. Games Steam, GOG or Epic already sync are left to them unless you turn them on.
         </p>
         <p class="lede">
-          Each game's page shows whose cloud syncs its save, the store's, Playfield's or both, and whether it is synced.
+          Each game's page shows whether its save is synced, and whose cloud has it.
         </p>
         <p class="lede">
           If a save changed on two computers, you choose which one to keep. The other is kept too.
@@ -237,13 +237,13 @@ const structuredData = {
         <p class="eyebrow">Downloads</p>
         <h2>A Downloads tab like Steam's, for every store.</h2>
         <p class="lede">
-          See what is downloading, what is next and what finished this week. Updates from Steam,
-          GOG, Amazon, Battle.net and stores in standalone mode wait for the hours you choose.
+          See what is downloading, what is next and what finished this week, and the updates
+          Steam, GOG, Amazon and Battle.net have found.
         </p>
         <p class="lede">
           Experimental: in standalone mode, Playfield installs, updates and uninstalls Steam,
-          Amazon, GOG, Epic, Battle.net, Ubisoft and EA games without opening the store's app.
-          Pause and resume downloads, and limit their speed.
+          Amazon, GOG, Epic, Battle.net, Ubisoft and EA games without the store's app on screen.
+          Pause and resume downloads, limit their speed, and have updates wait for the hours you choose.
         </p>
       </div>
       <figure class="shot">
@@ -258,7 +258,7 @@ const structuredData = {
         <p class="eyebrow">Collections</p>
         <h2>Collections that update themselves.</h2>
         <p class="lede">
-          Make a collection from a search, like games you can finish in under 15 hours, or GOG games you have never started.
+          Make a collection from a search, like games you can finish in under 15 hours. Searches can be typed too: <code>store:gog -played:</code> finds the GOG games you have never started.
         </p>
       </div>
       <figure class="shot">
@@ -276,7 +276,7 @@ const structuredData = {
           Playfield installs GOG Galaxy, the Epic Games Launcher, Amazon Games, Ubisoft Connect, the EA app and Battle.net with a Proton version you already have, or uses the store apps you run in Lutris, Heroic or Bottles.
         </p>
         <p class="lede">
-          Microsoft Store games install and play too, through ferestre, which you install from
+          Microsoft Store games you own install and play too, through ferestre, which you install from
           Playfield's settings.
         </p>
         <p class="lede">
