@@ -37,25 +37,25 @@ const rest = [
     id: "cheats",
     tab: "Cheats",
     heading: "Cheats and trainers.",
-    body: "Build a game's cheats from Steam's page, for Steam games and store games in standalone mode, and turn them on from Quick Access while it runs, laid out as the trainer draws them. Trainers can be found, downloaded and deleted from the page too.",
+    body: "Build a game's cheats from its Playfield… page, for Steam games and store games in standalone mode, and turn them on from Quick Access while it runs, laid out as the trainer draws them. Trainers can be found, downloaded and deleted there too.",
     shot: shotCheats,
-    alt: "DAVE THE DIVER's cheats in Game Mode: 33 built-in cheats, Build them again, Delete and Get a trainer",
+    alt: "DAVE THE DIVER's Playfield… page in Game Mode, on Cheats: 33 built-in cheats, Build them again, Delete and Get a trainer",
   },
   {
     id: "saves",
     tab: "Saves",
     heading: "Cloud saves in Game Mode.",
-    body: "A game's save is brought down before you play and sent after, whichever button started it. If two computers both changed it, Steam asks which to keep. Steam games show Steam Cloud's status, each kept save can be moved on its own, and Quick Access shows where saves go and what is waiting to be sent.",
+    body: "A game's save is brought down before you play and sent after, whichever button started it. If two computers both changed it, Steam asks which to keep. The game's page shows whose cloud syncs its save and whether it is synced. Each kept save can be moved on its own, and Quick Access shows what is waiting to be sent.",
     shot: shotSaves,
-    alt: "The Playfield panel in Quick Access: the Microsoft Store through ferestre, saves going to Google Drive, and the library's sync, tabs and HowLongToBeat rows",
+    alt: "The Playfield panel in Quick Access: Sync now, two waiting updates, seven of eight stores on, saves going to Google Drive with everything sent, library tabs and HowLongToBeat",
   },
   {
     id: "proton",
     tab: "Proton",
     heading: "Proton and launch settings.",
-    body: "Choose the Proton version a Steam game runs under, or a store game's in a prefix of its own when its store runs standalone. Change a game's launch settings: HDR, the MangoHud overlay and your own. Each store's Proton version is chosen in Quick Access.",
+    body: "On a game's Playfield… page, choose the Proton version a Steam game runs under, or a store game's in a prefix of its own when its store runs standalone, and change its launch settings: HDR, the MangoHud overlay and your own. Each store's Proton version is chosen on its page in Quick Access.",
     shot: shotProton,
-    alt: "Runs under for Moonlighter in Game Mode: a list of Proton versions, shared with GOG or in its own prefix",
+    alt: "Runs under for Moonlighter, from its Playfield… page: a list of Proton versions, shared with GOG or in its own prefix",
   },
   {
     id: "artwork",
@@ -69,9 +69,9 @@ const rest = [
     id: "hltb",
     tab: "HowLongToBeat",
     heading: "HowLongToBeat in Game Mode.",
-    body: "Mark a game backlog, playing, completed or retired, and link it to HowLongToBeat. Sign in from Steam's browser to send your play, Steam games' too.",
+    body: "Mark a game backlog, playing, completed or retired from its menu, and link it to HowLongToBeat on its Playfield… page. Sign in from Steam's browser to send your play, Steam games' too.",
     shot: shotHltb,
-    alt: "Moonlighter's Where you are menu: Backlog, Playing, Completed, Retired and Link HowLongToBeat",
+    alt: "Moonlighter's game menu in Game Mode: Where you are open on Backlog, Playing, Completed and Retired, with Saves, Change artwork and Playfield… below",
   },
   {
     id: "microsoft",
@@ -122,7 +122,7 @@ const rest = [
       </div>
 
       <figure class="shot shot--hero">
-        <Image src={shotPage} alt="Enter the Gungeon's page in Game Mode: its logo, description and facts, an Install on Amazon button and a Playfield tab" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
+        <Image src={shotPage} alt="Enter the Gungeon's page in Game Mode: not on this disk, 308 MB, 51 minutes played and Proton - Experimental above Install on Amazon, and the Playfield tab's Where you are, Saves and Cheats" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" loading="eager" />
       </figure>
     </div>
   </section>
@@ -133,11 +133,14 @@ const rest = [
         <p class="eyebrow">Library</p>
         <h2>Each store's games, with artwork and their own collection.</h2>
         <p class="lede">
-          Games from the stores you turn on appear in Steam's library with their artwork. Each tile shows which stores you own the game on, and games that aren't installed are dimmed and read <em>Not installed</em> on Home. Each store gets its own collection, plus one for everything installed.
+          Games from the stores you turn on appear in Steam's library with their artwork. Each tile shows which stores you own the game on, and games that aren't installed are dimmed and read <em>Not installed</em> on Home. Each store gets its own collection, plus one for all your games and one for everything installed.
+        </p>
+        <p class="lede">
+          Your Playfield collections show in Steam too. Add a game to one in Steam or take one out, and the collection changes in Playfield. Collections made from a search stay as Playfield fills them.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotLibrary} alt="The Playfield · Amazon collection in Steam's library: each game has an Amazon icon, and uninstalled games are dimmed" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+        <Image src={shotLibrary} alt="Playfield · Fast Finish, one of your Playfield collections, in Steam's library: games from Amazon, Steam, Epic and GOG, each with its store's icon" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
       </figure>
     </div>
   </section>
@@ -163,7 +166,7 @@ const rest = [
         <p class="eyebrow">On the game's page</p>
         <h2>Install, play and uninstall from Steam's page.</h2>
         <p class="lede">
-          Install opens the store's app in Game Mode to install the game. If you own it on more than one store, choose which one, and for a GOG game its language and DLC. Once it is installed, Steam's <em>Play</em> button starts it.
+          Before you install a game, its page shows its size and the Proton version it will run under. Install opens the store's app in Game Mode to install the game. If you own it on more than one store, choose which one, and for a GOG game its language and DLC. Once it is installed, Steam's <em>Play</em> button starts it.
         </p>
         <p class="lede">
           <em>Uninstall</em> in the game's <em>Manage</em> menu removes the game and keeps its Steam entry, playtime and controller layout.
@@ -173,7 +176,7 @@ const rest = [
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotInstall} alt="The Abandoned Planet's page in Game Mode, not installed, with an Install on Amazon button" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+        <Image src={shotInstall} alt="The Abandoned Planet's page in Game Mode, not installed: 555 MB, Proton - Experimental and an Install on Amazon button" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
       </figure>
     </div>
   </section>
@@ -184,11 +187,14 @@ const rest = [
         <p class="eyebrow">Playfield tab</p>
         <h2>A Playfield tab on every game's page.</h2>
         <p class="lede">
-          Every game's page, Steam games too, gets a <em>Playfield</em> tab with its description, trailers, screenshots, the stores you own it on and its achievements. The page shows the ProtonDB rating, and Steam shows Playfield's playtime. <em>Everything about it</em> in the game's menu opens the same panels.
+          Every game's page, Steam games too, shows Playfield's facts beside <em>Play</em>: playtime, size, ProtonDB rating, and a cloud for whoever syncs its saves. Its <em>Playfield</em> tab shows where you are, your saves and your cheats above its trailers and screenshots.
+        </p>
+        <p class="lede">
+          <em>Playfield…</em> in the game's menu opens a page for the game's settings: how it runs, saves, cheats, HowLongToBeat and achievements.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotSheet} alt="The Playfield tab on DAVE THE DIVER's page: trailers, the store it is owned on, where you are, saves and cheats" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+        <Image src={shotSheet} alt="DAVE THE DIVER's page in Game Mode: its size, playtime, Proton and Steam Cloud beside Update, and the Playfield tab's Where you are, Saves and Cheats above its trailers" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
       </figure>
     </div>
   </section>
@@ -217,14 +223,14 @@ const rest = [
         <p class="eyebrow">Quick Access</p>
         <h2>Choose which stores show up.</h2>
         <p class="lede">
-          Turn stores on or off in Quick Access and see how many of their games are in Steam. Turning a store off leaves its games and playtime in Steam until you remove them.
+          Quick Access has a page for your stores. Turn each one on or off, see how many of its games are in Steam, how it installs and the Proton version it runs under. Turning a store off leaves its games and playtime in Steam until you remove them.
         </p>
         <p class="lede">
-          Quick Access also lists waiting downloads and updates.
+          Quick Access also lists waiting downloads and updates. While a sync runs, its progress shows in Steam's top bar.
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotPanel} alt="The Playfield panel in Quick Access: two waiting updates, and a switch and a game count for each store" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
+        <Image src={shotPanel} alt="The Stores page in Quick Access: each store on or off, with how many of its games are in Steam and whether it runs standalone" widths={widths} sizes="(max-width: 60rem) 100vw, 1100px" />
       </figure>
     </div>
   </section>
