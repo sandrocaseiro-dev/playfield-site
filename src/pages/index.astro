@@ -19,6 +19,7 @@ import shotPrefixes from "../assets/shots/prefixes.png";
 import shotExternal from "../assets/shots/external.png";
 import shotLaunch from "../assets/shots/launch-options.png";
 import shotSaves from "../assets/shots/saves.png";
+import shotLibrarySync from "../assets/shots/library-sync.png";
 import shotSavesKept from "../assets/shots/saves-kept.png";
 import shotDownloads from "../assets/shots/downloads.png";
 import shotStats from "../assets/shots/stats.png";
@@ -230,12 +231,36 @@ const structuredData = {
         </p>
       </div>
       <figure class="shot">
-        <Image src={shotSaves} alt="Settings, Saves: Google Drive as the default, MEGA as a second place, and a switch for each store" widths={[900, 1280]} sizes="(max-width: 60rem) 100vw, 1250px" />
+        <Image src={shotSaves} alt="Settings, Sync, Saves: Steam left to its own cloud, GOG saves going to Google Drive and your own games to MEGA, and ten saves kept per game" widths={[900, 1280]} sizes="(max-width: 60rem) 100vw, 1250px" />
       </figure>
     </div>
   </section>
 
   <section class="feature">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">Your library</p>
+        <h2>The same library on every machine.</h2>
+        <p class="lede">
+          Turn on sharing in Settings › Sync and your collections, picked covers, links, corrections, hidden games and home are the same on every computer that shares through the same place.
+        </p>
+        <p class="lede">
+          Tick Where you are to share each game's status and playtime too, with the hours from every machine added up. Store choices, views and sorts, and your keys and sign-ins can be shared as well.
+        </p>
+        <p class="lede">
+          If two machines changed the same thing, Playfield asks which to keep. Earlier versions of your library can be put back.
+        </p>
+        <p class="lede">
+          Console mode and the Decky plugin in Game Mode can turn sharing on and sync too.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotLibrarySync} alt="Settings, Sync, Your library: sharing on through Google Drive, and two changes from Steam Deck waiting, a renamed collection and Hades marked Playing there" widths={[900, 1280]} sizes="(max-width: 60rem) 100vw, 1250px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature feature--flip">
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Downloads</p>
@@ -256,7 +281,7 @@ const structuredData = {
     </div>
   </section>
 
-  <section class="feature feature--flip">
+  <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Collections</p>
@@ -271,7 +296,7 @@ const structuredData = {
     </div>
   </section>
 
-  <section class="feature">
+  <section class="feature feature--flip">
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Linux</p>
@@ -293,7 +318,7 @@ const structuredData = {
     </div>
   </section>
 
-  <section class="feature feature--flip">
+  <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Console mode</p>
@@ -309,7 +334,7 @@ const structuredData = {
     </div>
   </section>
 
-  <section class="feature">
+  <section class="feature feature--flip">
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Themes</p>
@@ -324,7 +349,7 @@ const structuredData = {
     </div>
   </section>
 
-  <section class="feature feature--flip">
+  <section class="feature">
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Streaming · Windows</p>
