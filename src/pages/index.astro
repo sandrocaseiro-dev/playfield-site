@@ -24,6 +24,7 @@ import shotDownloads from "../assets/shots/downloads.png";
 import shotStats from "../assets/shots/stats.png";
 import shotBackup from "../assets/shots/backup.png";
 import shotMetadata from "../assets/shots/metadata.png";
+import shotThemes from "../assets/shots/themes.png";
 
 const base = import.meta.env.BASE_URL;
 const latest = await getLatest();
@@ -47,7 +48,7 @@ const rest = [
     id: "beat",
     tab: "Playtime",
     heading: "Playtime and time to beat.",
-    body: "HowLongToBeat times next to the hours you have played. Mark games as backlog, playing, completed or retired, and fix hours a store got wrong. Sign in to HowLongToBeat to sync your list with it.",
+    body: "HowLongToBeat times next to the hours you have played. Mark games as backlog, playing, completed or retired, and fix hours a store got wrong. Sign in to HowLongToBeat to sync your list with it, or send one game, or every game not sent yet, by hand.",
     shot: shotBeat,
     alt: "A game's page in Playfield, showing how long it takes to beat beside how long it has been played",
   },
@@ -63,7 +64,7 @@ const rest = [
     id: "cheats",
     tab: "Cheats",
     heading: "Trainers and cheats.",
-    body: "Playfield downloads trainers from FLiNG or GameCopyWorld and starts them with the game, on Windows and on Linux under Proton. With a Wand (WeMod) account, it builds Wand's cheats for your game, and you turn them on from a window beside the game or from your phone.",
+    body: "Playfield downloads trainers from FLiNG or GameCopyWorld and starts them with the game, on Windows and on Linux under Proton. With a Wand (WeMod) account, it builds Wand's cheats for your game, and you turn them on from a window beside the game or from your phone. Show just the cheats that are on.",
     shot: shotCheats,
     alt: "A game's cheats: 24 built-in cheats from Wand, Wand itself and a FLiNG trainer",
   },
@@ -71,7 +72,7 @@ const rest = [
     id: "launch",
     tab: "Launch options",
     heading: "Launch options and Proton, on Linux.",
-    body: "Turn on HDR or the MangoHud overlay for each game, or add your own settings. Choose the Proton version each Steam game runs under. In the experimental standalone mode, any store's game can have its own.",
+    body: "Turn on HDR or the MangoHud overlay for each game or for every game at once, or add your own settings. Any game can open in a window of its own, at a size you choose. Choose the Proton version each Steam game runs under. In the experimental standalone mode, any store's game can have its own.",
     shot: shotLaunch,
     alt: "A game's How it runs panel on Linux: its Proton version being chosen, above HDR and the MangoHud overlay",
   },
@@ -224,6 +225,9 @@ const structuredData = {
         <p class="lede">
           If a save changed on two computers, you choose which one to keep. The other is kept too.
         </p>
+        <p class="lede">
+          Before you uninstall a game or delete a store's prefix, Playfield says which saves would go with it and can back them up first.
+        </p>
       </div>
       <figure class="shot">
         <Image src={shotSaves} alt="Settings, Saves: Google Drive as the default, MEGA as a second place, and a switch for each store" widths={[900, 1280]} sizes="(max-width: 60rem) 100vw, 1250px" />
@@ -243,7 +247,7 @@ const structuredData = {
         <p class="lede">
           Experimental: in standalone mode, Playfield installs, updates and uninstalls Steam,
           Amazon, GOG, Epic, Battle.net, Ubisoft and EA games without the store's app on screen.
-          Pause and resume downloads, limit their speed, and have updates wait for the hours you choose.
+          Pause and resume downloads, move one to another folder, limit their speed, and have updates wait for the hours you choose.
         </p>
       </div>
       <figure class="shot">
@@ -296,7 +300,7 @@ const structuredData = {
         <h2>A full-screen view for playing on a TV with a controller.</h2>
         <p class="lede">
           Each game's page has everything about it: its status, launch settings, saves and cheats.
-          Filter the library with the controller by store, status, genre and tag.
+          Filter the library with the controller by store, status, genre and tag. If another game from the same store is running, Play takes you back to it.
         </p>
       </div>
       <figure class="shot">
@@ -306,6 +310,21 @@ const structuredData = {
   </section>
 
   <section class="feature">
+    <div class="page feature__inner">
+      <div class="feature__text">
+        <p class="eyebrow">Themes</p>
+        <h2>Themes for the desktop and console mode.</h2>
+        <p class="lede">
+          Choose from eight themes in Settings, one for the desktop window and one for console mode, or add your own. Calm motion holds covers and animations still.
+        </p>
+      </div>
+      <figure class="shot">
+        <Image src={shotThemes} alt="Settings, Appearance in the Paper theme: Default and eight themes to choose for the desktop, and the same for console mode" widths={[900, 1400, 1600]} sizes="(max-width: 60rem) 100vw, 1250px" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature feature--flip">
     <div class="page feature__inner">
       <div class="feature__text">
         <p class="eyebrow">Streaming · Windows</p>
